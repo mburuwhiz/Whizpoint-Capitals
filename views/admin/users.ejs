@@ -1,21 +1,68 @@
-<h1>User Management</h1>
-<table>
-  <thead>
-    <tr>
-      <th>Email</th>
-      <th>Currency</th>
-      <th>Status</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% users.forEach(u => { %>
-      <tr>
-        <td><%= u.email %></td>
-        <td><%= u.preferredCurrency %></td>
-        <td><%= u.verificationStatus %></td>
-        <td><a href="/admin/users/<%= u._id %>">View Details</a></td>
-      </tr>
-    <% }) %>
-  </tbody>
-</table>
+<div class="space-y-8">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div>
+      <h1 class="text-3xl font-black text-gray-900 dark:text-white tracking-tight">User Management</h1>
+      <p class="text-gray-500 dark:text-gray-400 mt-1 font-medium">Browse and manage all registered accounts on the platform.</p>
+    </div>
+    <div class="relative">
+       <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+       <input type="text" placeholder="Search by email or ID..." class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl py-3 pl-12 pr-6 font-bold text-sm shadow-sm outline-none focus:border-primary-500 transition-all w-full md:w-80">
+    </div>
+  </div>
+
+  <div class="card p-0 overflow-hidden border-none shadow-2xl bg-white dark:bg-gray-800">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-100 dark:divide-gray-700/50">
+        <thead class="bg-gray-50 dark:bg-gray-900/50">
+          <tr>
+            <th class="px-8 py-5 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">User Identity</th>
+            <th class="px-8 py-5 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">Currency</th>
+            <th class="px-8 py-5 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">KYC Status</th>
+            <th class="px-8 py-5 text-left text-[10px] font-black text-gray-400 uppercase tracking-widest">Risk Score</th>
+            <th class="px-8 py-5 text-right text-[10px] font-black text-gray-400 uppercase tracking-widest">Control</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 dark:divide-gray-700/50">
+          <% users.forEach(u => { %>
+            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors group">
+              <td class="px-8 py-6 whitespace-nowrap">
+                <div class="flex items-center gap-4">
+                  <div class="w-10 h-10 rounded-xl bg-primary-100 dark:bg-primary-900/30 text-primary-600 flex items-center justify-center font-black">
+                     <%= u.email.charAt(0).toUpperCase() %>
+                  </div>
+                  <div>
+                    <div class="text-sm font-black text-gray-900 dark:text-white"><%= u.email %></div>
+                    <div class="text-[10px] text-gray-400 font-mono italic">UID: <%= u._id.toString().slice(-8) %></div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-8 py-6 whitespace-nowrap">
+                <span class="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-lg text-xs font-black text-gray-600 dark:text-gray-400 uppercase tracking-widest">
+                  <%= u.preferredCurrency %>
+                </span>
+              </td>
+              <td class="px-8 py-6 whitespace-nowrap">
+                <div class="flex items-center gap-2">
+                   <span class="w-2 h-2 rounded-full <%= u.verificationStatus === 'Verified' ? 'bg-green-500' : (u.verificationStatus === 'Unverified' ? 'bg-gray-300' : 'bg-amber-500') %>"></span>
+                   <span class="text-xs font-bold <%= u.verificationStatus === 'Verified' ? 'text-green-600' : (u.verificationStatus === 'Unverified' ? 'text-gray-500' : 'text-amber-600') %>">
+                     <%= u.verificationStatus %>
+                   </span>
+                </div>
+              </td>
+              <td class="px-8 py-6 whitespace-nowrap">
+                <div class="w-full bg-gray-100 dark:bg-gray-700 h-1.5 rounded-full overflow-hidden max-w-[100px]">
+                   <div class="bg-<%= u.riskScore > 70 ? 'red' : (u.riskScore > 30 ? 'amber' : 'green') %>-500 h-full" style="width: <%= u.riskScore %>%"></div>
+                </div>
+              </td>
+              <td class="px-8 py-6 whitespace-nowrap text-right">
+                <a href="/admin/users/<%= u._id %>" class="btn bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-primary-600 hover:text-white transition-all shadow-sm">
+                  Manage <i class="fas fa-chevron-right ml-1"></i>
+                </a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

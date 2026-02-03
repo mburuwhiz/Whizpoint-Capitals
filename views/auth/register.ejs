@@ -22,7 +22,12 @@
 
       <div>
         <label class="font-bold" style="font-size: 0.875rem; display: block; margin-bottom: 0.5rem;">Password</label>
-        <input name="password" type="password" required class="input-field" placeholder="Create a strong password">
+        <div style="position: relative;">
+          <input id="password" name="password" type="password" required class="input-field" placeholder="Create a strong password">
+          <button type="button" id="togglePassword" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted);">
+            👁️
+          </button>
+        </div>
       </div>
 
       <div>
@@ -51,6 +56,17 @@
       </button>
     </form>
   </div>
+
+  <script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#password');
+
+    togglePassword.addEventListener('click', function (e) {
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      this.textContent = type === 'password' ? '👁️' : '🕶️';
+    });
+  </script>
 
   <p class="text-center mt-8 text-muted">
     Already have an account? <a href="/login" class="text-primary font-bold" style="text-decoration: none;">Sign in here</a>

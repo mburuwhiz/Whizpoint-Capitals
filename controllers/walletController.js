@@ -2,6 +2,7 @@ const Wallet = require('../models/Wallet');
 const Transaction = require('../models/Transaction');
 const User = require('../models/User');
 const darajaClient = require('../utils/darajaClient');
+const sendEmail = require('../utils/emailer');
 
 exports.getWallets = async (req, res) => {
   const wallets = await Wallet.find({ userId: req.user._id });
@@ -50,6 +51,15 @@ exports.postWithdraw = async (req, res) => {
 
     // Check verification
     if (req.user.verificationStatus === 'Unverified') {
+      await sendEmail({
+        email: req.user.email,
+        subject: 'Verification Required',
+        message: 'Action Required: Please complete your verification to perform withdrawals.',
+        type: 'verification',
+        template: 'verification-required',
+        user: req.user,
+        templateData: { dashboardUrl: `${req.protocol}://${req.get('host')}` }
+      });
       return res.redirect('/verification?reason=verification_required');
     }
 
@@ -78,37 +88,50 @@ exports.postWithdraw = async (req, res) => {
 };
 
 exports.getTransfer = (req, res) => {
-  res.render('user/transfer', { title: 'Internal Transfer' });
+  res.render('user/transfer', { title: 'Internal Transfer', captchaSvg: res.locals.captchaSvg });
 };
 
 exports.postTransfer = async (req, res) => {
+  const svgCaptcha = require('svg-captcha');
+  const getNewCaptcha = () => {
+    const captcha = svgCaptcha.create({ size: 6, noise: 3, color: true, background: '#f8fafc' });
+    req.session.captcha = captcha.text.toLowerCase();
+    return captcha.data;
+  };
+
   try {
     const { recipientEmail, amount, currency } = req.body;
 
     if (req.captchaError) {
-      const svgCaptcha = require('svg-captcha');
-      const captcha = svgCaptcha.create({ size: 6, noise: 3, color: true, background: '#f8fafc' });
-      req.session.captcha = captcha.text.toLowerCase();
-      return res.render('user/transfer', { error: req.captchaError, title: 'Internal Transfer', captchaSvg: captcha.data });
+      return res.render('user/transfer', { error: req.captchaError, title: 'Internal Transfer', captchaSvg: getNewCaptcha() });
     }
 
     // Check verification
     if (req.user.verificationStatus === 'Unverified') {
+      await sendEmail({
+        email: req.user.email,
+        subject: 'Verification Required',
+        message: 'Action Required: Please complete your verification to perform internal transfers.',
+        type: 'verification',
+        template: 'verification-required',
+        user: req.user,
+        templateData: { dashboardUrl: `${req.protocol}://${req.get('host')}` }
+      });
       return res.redirect('/verification?reason=verification_required');
     }
 
     if (recipientEmail === req.user.email) {
-      return res.render('user/transfer', { error: 'Cannot transfer to yourself', title: 'Internal Transfer' });
+      return res.render('user/transfer', { error: 'Cannot transfer to yourself', title: 'Internal Transfer', captchaSvg: getNewCaptcha() });
     }
 
     const recipient = await User.findOne({ email: recipientEmail });
     if (!recipient) {
-      return res.render('user/transfer', { error: 'Recipient not found', title: 'Internal Transfer' });
+      return res.render('user/transfer', { error: 'Recipient not found', title: 'Internal Transfer', captchaSvg: getNewCaptcha() });
     }
 
     const senderWallet = await Wallet.findOne({ userId: req.user._id, currency });
     if (!senderWallet || senderWallet.balance < amount) {
-      return res.render('user/transfer', { error: 'Insufficient balance', title: 'Internal Transfer' });
+      return res.render('user/transfer', { error: 'Insufficient balance', title: 'Internal Transfer', captchaSvg: getNewCaptcha() });
     }
 
     // Process transfer
@@ -142,9 +165,9 @@ exports.postTransfer = async (req, res) => {
       description: `Transfer from ${req.user.email}`
     });
 
-    res.render('user/transfer', { message: 'Transfer successful', title: 'Internal Transfer' });
+    res.render('user/transfer', { message: 'Transfer successful', title: 'Internal Transfer', captchaSvg: getNewCaptcha() });
   } catch (err) {
-    res.render('user/transfer', { error: err.message, title: 'Internal Transfer' });
+    res.render('user/transfer', { error: err.message, title: 'Internal Transfer', captchaSvg: getNewCaptcha() });
   }
 };
 

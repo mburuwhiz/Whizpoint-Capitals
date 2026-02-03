@@ -2,9 +2,22 @@
 > app@1.0.0 start
 > node app.js
 
-[dotenv@17.2.3] injecting env (20) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
-[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+[dotenv@17.2.3] injecting env (20) from .env -- tip: 👥 sync secrets across teammates & machines: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
 Server running in development mode on port 3000
-[0mGET / [32m200[0m 14.223 ms - 8484[0m
-[0mGET /css/main.css [32m200[0m 8.274 ms - 3783[0m
-[0mGET /js/main.js [32m200[0m 7.234 ms - 755[0m
+[0mGET / [32m200[0m 15.038 ms - 8484[0m
+[0mGET /css/main.css [32m200[0m 7.263 ms - 3783[0m
+[0mGET /js/main.js [32m200[0m 1.594 ms - 755[0m
+[0mGET /nonexistent [33m404[0m 4.410 ms - 4802[0m
+[0mGET /css/main.css [36m304[0m 1.497 ms - -[0m
+[0mGET /js/main.js [36m304[0m 1.033 ms - -[0m
+[0mGET /login [32m200[0m 11.696 ms - 17341[0m
+[0mGET /css/main.css [36m304[0m 3.211 ms - -[0m
+[0mGET /js/main.js [36m304[0m 2.509 ms - -[0m
+[0mGET / [32m200[0m 5.830 ms - 8484[0m
+[0mGET /login [32m200[0m 8.212 ms - 18310[0m
+[0mGET /css/main.css [32m200[0m 6.609 ms - 3783[0m
+[0mGET /js/main.js [32m200[0m 3.364 ms - 755[0m
+[0mGET /register [32m200[0m 5.991 ms - 20374[0m
+[0mGET /css/main.css [36m304[0m 1.685 ms - -[0m
+[0mGET /js/main.js [36m304[0m 1.528 ms - -[0m

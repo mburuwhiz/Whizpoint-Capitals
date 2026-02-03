@@ -1,102 +1,119 @@
-<div class="max-w-4xl mx-auto">
-  <div class="mb-8">
-    <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white">Notification Settings</h1>
-    <p class="text-muted">Choose how you want to be notified about your account activity.</p>
+<div class="max-w-5xl mx-auto">
+  <div class="mb-10">
+    <h1 class="text-4xl font-black text-gray-900 dark:text-white tracking-tight">Notification Preferences</h1>
+    <p class="text-gray-500 dark:text-gray-400 mt-2 font-medium">Customize how and when you want to be reached by <%= process.env.COMPANY_NAME %>.</p>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-    <div class="md:col-span-1 space-y-6">
-      <nav class="card p-0 overflow-hidden">
-        <a href="/profile" class="block px-6 py-4 text-gray-600 hover:bg-gray-50 border-l-4 border-transparent transition">
-          <i class="fas fa-user-circle mr-2"></i> General
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+    <!-- Sidebar -->
+    <div class="lg:col-span-4 space-y-6">
+      <nav class="card p-2 space-y-1 border-none shadow-xl">
+        <a href="/profile" class="flex items-center px-6 py-4 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/30 rounded-xl font-bold transition">
+          <i class="fas fa-user-circle w-8 opacity-50"></i> General
         </a>
-        <a href="/profile/notifications" class="block px-6 py-4 bg-primary-50 text-primary-600 font-bold border-l-4 border-primary-600">
-          <i class="fas fa-bell mr-2"></i> Notifications
+        <a href="/profile/notifications" class="flex items-center px-6 py-4 bg-primary-600 text-white rounded-xl font-bold shadow-lg shadow-primary-500/30">
+          <i class="fas fa-bell w-8"></i> Notifications
         </a>
-        <a href="/profile/disputes" class="block px-6 py-4 text-gray-600 hover:bg-gray-50 border-l-4 border-transparent transition">
-          <i class="fas fa-gavel mr-2"></i> My Disputes
+        <a href="/profile/disputes" class="flex items-center px-6 py-4 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/30 rounded-xl font-bold transition">
+          <i class="fas fa-gavel w-8 opacity-50"></i> My Disputes
         </a>
-        <a href="/verification" class="block px-6 py-4 text-gray-600 hover:bg-gray-50 border-l-4 border-transparent transition">
-          <i class="fas fa-id-card mr-2"></i> Verification
+        <a href="/verification" class="flex items-center px-6 py-4 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/30 rounded-xl font-bold transition">
+          <i class="fas fa-id-card w-8 opacity-50"></i> Verification
         </a>
       </nav>
     </div>
 
-    <div class="md:col-span-2">
-      <div class="card">
-        <h3 class="text-xl font-bold mb-6">Email Preferences</h3>
-        <form action="/profile/notifications" method="POST" class="space-y-6">
+    <!-- Content -->
+    <div class="lg:col-span-8">
+      <div class="card border-none shadow-xl p-8 bg-white dark:bg-gray-800">
+        <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-8 tracking-tight">Email Notifications</h3>
+        <form action="/profile/notifications" method="POST" class="space-y-4">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-          <div class="space-y-4">
-            <label class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl cursor-pointer hover:bg-gray-100 transition">
+          <div class="space-y-3">
+            <label class="flex items-center justify-between p-6 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border-2 border-transparent hover:border-primary-500 transition-all cursor-pointer group">
               <div class="flex items-center">
-                <div class="w-10 h-10 bg-white dark:bg-gray-700 rounded-lg flex items-center justify-center text-primary-600 mr-4 shadow-sm">
-                  <i class="fas fa-sign-in-alt"></i>
+                <div class="w-12 h-12 bg-white dark:bg-gray-800 rounded-xl flex items-center justify-center text-primary-600 mr-5 shadow-sm group-hover:scale-110 transition-transform">
+                  <i class="fas fa-sign-in-alt text-xl"></i>
                 </div>
                 <div>
-                  <p class="font-bold">Login Alerts</p>
-                  <p class="text-xs text-muted">Get notified every time someone logs into your account.</p>
+                  <p class="font-black text-gray-900 dark:text-white">Login Alerts</p>
+                  <p class="text-xs text-gray-400 font-medium">Security alerts when your account is accessed.</p>
                 </div>
               </div>
-              <input type="checkbox" name="loginAlerts" class="w-5 h-5 text-primary-600 rounded" <%= user.emailPreferences.loginAlerts ? 'checked' : '' %>>
+              <div class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" name="loginAlerts" class="sr-only peer" <%= user.emailPreferences.loginAlerts ? 'checked' : '' %>>
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-600"></div>
+              </div>
             </label>
 
-            <label class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl cursor-pointer hover:bg-gray-100 transition">
+            <label class="flex items-center justify-between p-6 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border-2 border-transparent hover:border-primary-500 transition-all cursor-pointer group">
               <div class="flex items-center">
-                <div class="w-10 h-10 bg-white dark:bg-gray-700 rounded-lg flex items-center justify-center text-red-600 mr-4 shadow-sm">
-                  <i class="fas fa-arrow-up"></i>
+                <div class="w-12 h-12 bg-white dark:bg-gray-800 rounded-xl flex items-center justify-center text-red-600 mr-5 shadow-sm group-hover:scale-110 transition-transform">
+                  <i class="fas fa-arrow-up text-xl"></i>
                 </div>
                 <div>
-                  <p class="font-bold">Withdrawal Alerts</p>
-                  <p class="text-xs text-muted">Instant notifications for all withdrawal requests.</p>
+                  <p class="font-black text-gray-900 dark:text-white">Withdrawal Alerts</p>
+                  <p class="text-xs text-gray-400 font-medium">Notifications for every fund withdrawal.</p>
                 </div>
               </div>
-              <input type="checkbox" name="withdrawalAlerts" class="w-5 h-5 text-primary-600 rounded" <%= user.emailPreferences.withdrawalAlerts ? 'checked' : '' %>>
+              <div class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" name="withdrawalAlerts" class="sr-only peer" <%= user.emailPreferences.withdrawalAlerts ? 'checked' : '' %>>
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-600"></div>
+              </div>
             </label>
 
-            <label class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl cursor-pointer hover:bg-gray-100 transition">
+            <label class="flex items-center justify-between p-6 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border-2 border-transparent hover:border-primary-500 transition-all cursor-pointer group">
               <div class="flex items-center">
-                <div class="w-10 h-10 bg-white dark:bg-gray-700 rounded-lg flex items-center justify-center text-blue-600 mr-4 shadow-sm">
-                  <i class="fas fa-paper-plane"></i>
+                <div class="w-12 h-12 bg-white dark:bg-gray-800 rounded-xl flex items-center justify-center text-blue-600 mr-5 shadow-sm group-hover:scale-110 transition-transform">
+                  <i class="fas fa-paper-plane text-xl"></i>
                 </div>
                 <div>
-                  <p class="font-bold">Transfer Alerts</p>
-                  <p class="text-xs text-muted">Receive alerts for internal and external transfers.</p>
+                  <p class="font-black text-gray-900 dark:text-white">Transfer Alerts</p>
+                  <p class="text-xs text-gray-400 font-medium">Alerts for internal wallet transfers.</p>
                 </div>
               </div>
-              <input type="checkbox" name="transferAlerts" class="w-5 h-5 text-primary-600 rounded" <%= user.emailPreferences.transferAlerts ? 'checked' : '' %>>
+              <div class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" name="transferAlerts" class="sr-only peer" <%= user.emailPreferences.transferAlerts ? 'checked' : '' %>>
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-600"></div>
+              </div>
             </label>
 
-            <label class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl cursor-pointer hover:bg-gray-100 transition">
+            <label class="flex items-center justify-between p-6 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border-2 border-transparent hover:border-primary-500 transition-all cursor-pointer group">
               <div class="flex items-center">
-                <div class="w-10 h-10 bg-white dark:bg-gray-700 rounded-lg flex items-center justify-center text-green-600 mr-4 shadow-sm">
-                  <i class="fas fa-user-check"></i>
+                <div class="w-12 h-12 bg-white dark:bg-gray-800 rounded-xl flex items-center justify-center text-green-600 mr-5 shadow-sm group-hover:scale-110 transition-transform">
+                  <i class="fas fa-user-check text-xl"></i>
                 </div>
                 <div>
-                  <p class="font-bold">Verification Emails</p>
-                  <p class="text-xs text-muted">Status updates on your KYC and account verification.</p>
+                  <p class="font-black text-gray-900 dark:text-white">Verification Updates</p>
+                  <p class="text-xs text-gray-400 font-medium">Status updates for your KYC applications.</p>
                 </div>
               </div>
-              <input type="checkbox" name="verificationEmails" class="w-5 h-5 text-primary-600 rounded" <%= user.emailPreferences.verificationEmails ? 'checked' : '' %>>
+              <div class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" name="verificationEmails" class="sr-only peer" <%= user.emailPreferences.verificationEmails ? 'checked' : '' %>>
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-600"></div>
+              </div>
             </label>
 
-            <label class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl cursor-pointer hover:bg-gray-100 transition">
+            <label class="flex items-center justify-between p-6 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border-2 border-transparent hover:border-primary-500 transition-all cursor-pointer group">
               <div class="flex items-center">
-                <div class="w-10 h-10 bg-white dark:bg-gray-700 rounded-lg flex items-center justify-center text-purple-600 mr-4 shadow-sm">
-                  <i class="fas fa-bullhorn"></i>
+                <div class="w-12 h-12 bg-white dark:bg-gray-800 rounded-xl flex items-center justify-center text-purple-600 mr-5 shadow-sm group-hover:scale-110 transition-transform">
+                  <i class="fas fa-bullhorn text-xl"></i>
                 </div>
                 <div>
-                  <p class="font-bold">Marketing Emails</p>
-                  <p class="text-xs text-muted">Promotions, new features, and market insights.</p>
+                  <p class="font-black text-gray-900 dark:text-white">Marketing & Insights</p>
+                  <p class="text-xs text-gray-400 font-medium">New features and investment opportunities.</p>
                 </div>
               </div>
-              <input type="checkbox" name="marketingEmails" class="w-5 h-5 text-primary-600 rounded" <%= user.emailPreferences.marketingEmails ? 'checked' : '' %>>
+              <div class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" name="marketingEmails" class="sr-only peer" <%= user.emailPreferences.marketingEmails ? 'checked' : '' %>>
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-600"></div>
+              </div>
             </label>
           </div>
 
-          <div class="pt-6">
-            <button type="submit" class="btn btn-primary px-8">
+          <div class="pt-8">
+            <button type="submit" class="btn-primary py-4 px-10 text-lg shadow-xl shadow-primary-500/20">
               Save Preferences
             </button>
           </div>

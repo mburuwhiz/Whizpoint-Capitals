@@ -1,56 +1,143 @@
-<h1>User Details: <%= targetUser.email %></h1>
-<p>Status: <%= targetUser.isFrozen ? 'FROZEN' : 'ACTIVE' %></p>
-<form action="/admin/users/<%= targetUser._id %>/toggle-freeze" method="POST">
-  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-  <input type="text" name="reason" placeholder="Reason for freeze/unfreeze" required>
-  <button type="submit"><%= targetUser.isFrozen ? 'Unfreeze' : 'Freeze' %> Account</button>
-</form>
+<div class="space-y-10">
+  <div class="flex items-center gap-4">
+    <a href="/admin/users" class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 hover:bg-gray-200 transition">
+       <i class="fas fa-arrow-left"></i>
+    </a>
+    <div>
+      <h1 class="text-3xl font-black text-gray-900 dark:text-white tracking-tight">Account Intelligence</h1>
+      <p class="text-gray-500 dark:text-gray-400 font-medium">Detailed oversight for <span class="text-primary-600"><%= targetUser.email %></span></p>
+    </div>
+  </div>
 
-<hr>
-<h2>Wallets</h2>
-<ul>
-  <% wallets.forEach(w => { %>
-    <li><%= w.currency %>: <%= w.balance %></li>
-  <% }) %>
-</ul>
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Account Overview -->
+    <div class="space-y-8">
+      <div class="card border-none shadow-2xl p-8 text-center bg-white dark:bg-gray-800">
+        <div class="w-24 h-24 bg-primary-100 dark:bg-primary-900/30 text-primary-600 rounded-3xl flex items-center justify-center text-4xl font-black mx-auto mb-6 shadow-xl shadow-primary-500/10">
+           <%= targetUser.email.charAt(0).toUpperCase() %>
+        </div>
+        <h3 class="font-black text-xl mb-1"><%= targetUser.email.split('@')[0] %></h3>
+        <p class="text-xs text-gray-400 font-bold uppercase tracking-widest mb-6"><%= targetUser.email %></p>
 
-<hr>
-<h3>Adjust Balance</h3>
-<form action="/admin/adjust-balance" method="POST">
-  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-  <input type="hidden" name="userId" value="<%= targetUser._id %>">
-  <div>
-    <label>Currency:</label>
-    <select name="currency">
-      <option value="USD">USD</option>
-      <option value="KES">KES</option>
-      <option value="UGX">UGX</option>
-    </select>
-  </div>
-  <div>
-    <label>Amount:</label>
-    <input type="number" name="amount" required step="0.01">
-  </div>
-  <div>
-    <label>Action:</label>
-    <select name="action">
-      <option value="add">Add</option>
-      <option value="subtract">Subtract</option>
-    </select>
-  </div>
-  <div>
-    <label>Reason:</label>
-    <input type="text" name="reason" required>
-  </div>
-  <div>
-    <label>Evidence Reference:</label>
-    <input type="text" name="evidenceReference">
-  </div>
-  <button type="submit">Update Balance</button>
-</form>
+        <div class="flex flex-col gap-3">
+          <div class="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-2xl flex justify-between items-center">
+             <span class="text-[10px] font-black uppercase text-gray-400">Account Status</span>
+             <span class="px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest <%= targetUser.isFrozen ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600' %>">
+               <%= targetUser.isFrozen ? 'Frozen' : 'Active' %>
+             </span>
+          </div>
+          <div class="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-2xl flex justify-between items-center">
+             <span class="text-[10px] font-black uppercase text-gray-400">KYC Level</span>
+             <span class="px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-blue-100 text-blue-600">
+               <%= targetUser.verificationStatus %>
+             </span>
+          </div>
+        </div>
 
-<hr>
-<h3>Recent Transactions</h3>
-<table>
-  <!-- Similar to user transactions table -->
-</table>
+        <form action="/admin/users/<%= targetUser._id %>/toggle-freeze" method="POST" class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-700 space-y-4">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <input type="text" name="reason" placeholder="Mandatory reason for action..." required class="input-field text-xs">
+          <button type="submit" class="w-full btn <%= targetUser.isFrozen ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700' %> text-white py-3 font-black uppercase tracking-widest shadow-lg">
+            <%= targetUser.isFrozen ? 'Unfreeze Account' : 'Freeze Account' %>
+          </button>
+        </form>
+      </div>
+
+      <div class="card border-none shadow-xl p-8 bg-gray-900 text-white">
+         <h4 class="font-black uppercase tracking-widest text-[10px] text-gray-400 mb-6">Currency Portfolios</h4>
+         <div class="space-y-6">
+            <% wallets.forEach(w => { %>
+              <div class="flex items-center justify-between border-b border-white/10 pb-4 last:border-0 last:pb-0">
+                 <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center font-black text-xs"><%= w.currency %></div>
+                    <span class="text-sm font-bold"><%= w.currency %> Wallet</span>
+                 </div>
+                 <span class="text-lg font-black tabular-nums"><%= w.balance.toLocaleString() %></span>
+              </div>
+            <% }) %>
+         </div>
+      </div>
+    </div>
+
+    <!-- Balance Adjustment & Controls -->
+    <div class="lg:col-span-2 space-y-8">
+      <div class="card border-none shadow-2xl p-8 bg-white dark:bg-gray-800">
+        <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-8 tracking-tight">Manual Balance Override</h3>
+        <form action="/admin/adjust-balance" method="POST" class="space-y-8">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <input type="hidden" name="userId" value="<%= targetUser._id %>">
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Currency</label>
+              <select name="currency" class="input-field text-sm font-bold">
+                <option value="USD">USD</option>
+                <option value="KES">KES</option>
+                <option value="UGX">UGX</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Operation</label>
+              <select name="action" class="input-field text-sm font-bold">
+                <option value="add">Add (+)</option>
+                <option value="subtract">Subtract (-)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Amount</label>
+              <input type="number" name="amount" required step="0.01" class="input-field text-sm font-bold" placeholder="0.00">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Adjustment Reason</label>
+              <input type="text" name="reason" required class="input-field text-sm" placeholder="e.g. Correcting double deposit...">
+            </div>
+            <div>
+              <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Evidence Reference</label>
+              <input type="text" name="evidenceReference" class="input-field text-sm" placeholder="Support ticket # or transaction ref...">
+            </div>
+          </div>
+
+          <div class="pt-6 border-t border-gray-100 dark:border-gray-700 flex justify-end">
+            <button type="submit" class="btn-primary py-4 px-10 shadow-xl shadow-primary-500/20 text-lg">
+               Commit Adjustment
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card border-none shadow-xl p-0 overflow-hidden bg-white dark:bg-gray-800">
+         <div class="px-8 py-5 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+            <h4 class="font-black uppercase tracking-widest text-[10px] text-gray-400">Ledger History</h4>
+            <a href="#" class="text-[10px] font-black text-primary-600 uppercase tracking-widest hover:underline">Full Audit</a>
+         </div>
+         <div class="p-0 overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-100 dark:divide-gray-700/50">
+               <thead class="bg-gray-50 dark:bg-gray-900/30">
+                  <tr>
+                     <th class="px-8 py-4 text-left text-[10px] font-black text-gray-400 uppercase">Type</th>
+                     <th class="px-8 py-4 text-left text-[10px] font-black text-gray-400 uppercase">Amount</th>
+                     <th class="px-8 py-4 text-left text-[10px] font-black text-gray-400 uppercase">Status</th>
+                     <th class="px-8 py-4 text-left text-[10px] font-black text-gray-400 uppercase">Timestamp</th>
+                  </tr>
+               </thead>
+               <tbody class="divide-y divide-gray-100 dark:divide-gray-700/50">
+                  <% transactions.forEach(tx => { %>
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/20 transition-colors">
+                       <td class="px-8 py-4 whitespace-nowrap text-xs font-bold text-gray-900 dark:text-white"><%= tx.type %></td>
+                       <td class="px-8 py-4 whitespace-nowrap text-xs font-black tabular-nums"><%= tx.amount.toFixed(2) %> <%= tx.currency %></td>
+                       <td class="px-8 py-4 whitespace-nowrap">
+                          <span class="px-2 py-0.5 rounded text-[10px] font-black uppercase <%= tx.status === 'Completed' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700' %>"><%= tx.status %></span>
+                       </td>
+                       <td class="px-8 py-4 whitespace-nowrap text-[10px] text-gray-400 font-medium"><%= tx.createdAt.toLocaleString() %></td>
+                    </tr>
+                  <% }) %>
+               </tbody>
+            </table>
+         </div>
+      </div>
+    </div>
+  </div>
+</div>

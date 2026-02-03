@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: 'Inter', Helvetica, Arial, sans-serif; background-color: #f8fafc; color: #1e293b; margin: 0; padding: 0; }
+    .container { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+    .header { background: #3b82f6; padding: 40px; text-align: center; }
+    .header h1 { color: #ffffff; margin: 0; font-size: 24px; font-weight: 800; }
+    .content { padding: 40px; line-height: 1.6; }
+    .footer { padding: 20px; text-align: center; font-size: 12px; color: #64748b; background: #f1f5f9; }
+    .alert { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 15px; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Whizpoint Capitals</h1>
+    </div>
+    <div class="content">
+      <h2>New Login Detected</h2>
+      <div class="alert">
+        <p><strong>Heads up!</strong> Your account was just logged into from a new session.</p>
+      </div>
+      <p>Time: <%= new Date().toUTCString() %></p>
+      <p>If this was you, you can safely ignore this email. If not, please change your password immediately and contact support.</p>
+    </div>
+    <div class="footer">
+      &copy; <%= new Date().getFullYear() %> Whizpoint Solutions. All rights reserved.
+    </div>
+  </div>
+</body>
+</html>

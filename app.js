@@ -8,7 +8,7 @@ const morgan = require('morgan');
 const dotenv = require('dotenv');
 const csrf = require('csurf');
 const connectDB = require('./utils/db');
-const { helmetConfig } = require('./middleware/security');
+const { helmetConfig, advancedSecurity } = require('./middleware/security');
 
 // Load env vars
 dotenv.config();
@@ -22,6 +22,7 @@ const app = express();
 
 // Security middleware
 app.use(helmetConfig);
+app.use(advancedSecurity);
 
 // Logging
 if (process.env.NODE_ENV === 'development') {
@@ -80,6 +81,11 @@ app.use('/', require('./routes/userRoutes'));
 app.use('/', require('./routes/walletRoutes'));
 app.use('/', require('./routes/verificationRoutes'));
 app.use('/', require('./routes/adminRoutes'));
+
+// 404 Handler
+app.use((req, res, next) => {
+  res.status(404).render('404', { title: '404 Not Found' });
+});
 
 // Error handling
 app.use((err, req, res, next) => {

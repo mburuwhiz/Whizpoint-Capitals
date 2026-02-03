@@ -1,74 +1,92 @@
-<div class="max-w-4xl mx-auto">
-  <div class="mb-8">
-    <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white">Profile Settings</h1>
-    <p class="text-muted">Manage your personal information and account preferences.</p>
+<div class="max-w-5xl mx-auto">
+  <div class="mb-10">
+    <h1 class="text-4xl font-black text-gray-900 dark:text-white tracking-tight">Account Settings</h1>
+    <p class="text-gray-500 dark:text-gray-400 mt-2 font-medium">Control your personal data, security, and communication preferences.</p>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-    <div class="md:col-span-1 space-y-6">
-      <div class="card text-center">
-        <div class="w-24 h-24 bg-primary-100 rounded-full mx-auto flex items-center justify-center text-primary-600 text-3xl font-bold mb-4">
-          <%= user.email.charAt(0).toUpperCase() %>
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+    <!-- Sidebar -->
+    <div class="lg:col-span-4 space-y-6">
+      <div class="card text-center p-8 border-none shadow-xl bg-white dark:bg-gray-800">
+        <div class="relative inline-block mb-4">
+          <div class="w-24 h-24 bg-gradient-to-tr from-primary-600 to-primary-400 rounded-2xl flex items-center justify-center text-white text-4xl font-black shadow-lg">
+            <%= user.email.charAt(0).toUpperCase() %>
+          </div>
+          <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 border-4 border-white dark:border-gray-800 rounded-full"></div>
         </div>
-        <h3 class="font-bold text-lg"><%= user.email.split('@')[0] %></h3>
-        <p class="text-xs text-muted mb-4"><%= user.email %></p>
-        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= user.verificationStatus === 'Verified' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' %>">
+        <h3 class="font-black text-xl text-gray-900 dark:text-white"><%= user.email.split('@')[0] %></h3>
+        <p class="text-sm text-gray-400 font-medium mb-6"><%= user.email %></p>
+        <div class="inline-flex items-center px-4 py-1 rounded-xl text-xs font-black uppercase tracking-widest <%= user.verificationStatus === 'Verified' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700' %>">
+          <i class="fas <%= user.verificationStatus === 'Verified' ? 'fa-check-circle' : 'fa-clock' %> mr-2"></i>
           <%= user.verificationStatus %>
-        </span>
+        </div>
       </div>
 
-      <nav class="card p-0 overflow-hidden">
-        <a href="/profile" class="block px-6 py-4 bg-primary-50 text-primary-600 font-bold border-l-4 border-primary-600">
-          <i class="fas fa-user-circle mr-2"></i> General
+      <nav class="card p-2 space-y-1 border-none shadow-xl">
+        <a href="/profile" class="flex items-center px-6 py-4 bg-primary-600 text-white rounded-xl font-bold shadow-lg shadow-primary-500/30">
+          <i class="fas fa-user-circle w-8"></i> General
         </a>
-        <a href="/profile/notifications" class="block px-6 py-4 text-gray-600 hover:bg-gray-50 border-l-4 border-transparent transition">
-          <i class="fas fa-bell mr-2"></i> Notifications
+        <a href="/profile/notifications" class="flex items-center px-6 py-4 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/30 rounded-xl font-bold transition">
+          <i class="fas fa-bell w-8 opacity-50"></i> Notifications
         </a>
-        <a href="/profile/disputes" class="block px-6 py-4 text-gray-600 hover:bg-gray-50 border-l-4 border-transparent transition">
-          <i class="fas fa-gavel mr-2"></i> My Disputes
+        <a href="/profile/disputes" class="flex items-center px-6 py-4 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/30 rounded-xl font-bold transition">
+          <i class="fas fa-gavel w-8 opacity-50"></i> My Disputes
         </a>
-        <a href="/verification" class="block px-6 py-4 text-gray-600 hover:bg-gray-50 border-l-4 border-transparent transition">
-          <i class="fas fa-id-card mr-2"></i> Verification
+        <a href="/verification" class="flex items-center px-6 py-4 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/30 rounded-xl font-bold transition">
+          <i class="fas fa-id-card w-8 opacity-50"></i> Verification
         </a>
       </nav>
     </div>
 
-    <div class="md:col-span-2">
-      <div class="card">
-        <h3 class="text-xl font-bold mb-6">Account Information</h3>
-        <form action="/profile" method="POST" class="space-y-6">
+    <!-- Content -->
+    <div class="lg:col-span-8 space-y-8">
+      <div class="card border-none shadow-xl p-8">
+        <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-8 tracking-tight">Personal Information</h3>
+        <form action="/profile" method="POST" class="space-y-8">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-          <div>
-            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
-            <input type="email" value="<%= user.email %>" disabled class="input-field bg-gray-50 cursor-not-allowed opacity-70">
-            <p class="text-[10px] text-muted mt-1 uppercase font-bold tracking-widest italic">Email cannot be changed</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="md:col-span-2">
+              <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-3">Email Address</label>
+              <div class="relative">
+                <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
+                <input type="email" value="<%= user.email %>" disabled class="w-full bg-gray-50 dark:bg-gray-900 border-none rounded-xl py-4 pl-12 font-bold text-gray-500 cursor-not-allowed">
+              </div>
+              <p class="text-[10px] text-amber-500 mt-2 font-bold uppercase tracking-tighter"><i class="fas fa-lock mr-1"></i> Email cannot be changed for security reasons</p>
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-3">Display Currency</label>
+              <div class="relative">
+                 <i class="fas fa-coins absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
+                 <select name="preferredCurrency" class="w-full bg-gray-50 dark:bg-gray-900 border-2 border-transparent focus:border-primary-500 rounded-xl py-4 pl-12 font-bold outline-none transition-all">
+                  <option value="USD" <%= user.preferredCurrency === 'USD' ? 'selected' : '' %>>USD - US Dollar</option>
+                  <option value="KES" <%= user.preferredCurrency === 'KES' ? 'selected' : '' %>>KES - Kenyan Shilling</option>
+                  <option value="UGX" <%= user.preferredCurrency === 'UGX' ? 'selected' : '' %>>UGX - Ugandan Shilling</option>
+                </select>
+              </div>
+              <p class="text-xs text-gray-400 mt-2 font-medium">This will be your default currency for balance displays.</p>
+            </div>
           </div>
 
-          <div>
-            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Preferred Currency</label>
-            <select name="preferredCurrency" class="input-field">
-              <option value="USD" <%= user.preferredCurrency === 'USD' ? 'selected' : '' %>>USD - US Dollar</option>
-              <option value="KES" <%= user.preferredCurrency === 'KES' ? 'selected' : '' %>>KES - Kenyan Shilling</option>
-              <option value="UGX" <%= user.preferredCurrency === 'UGX' ? 'selected' : '' %>>UGX - Ugandan Shilling</option>
-            </select>
-            <p class="text-xs text-muted mt-2">This currency will be used for your primary dashboard display.</p>
-          </div>
-
-          <div class="pt-4 border-top border-gray-100 mt-6">
-            <button type="submit" class="btn btn-primary px-8">
-              Update Profile
+          <div class="pt-6 border-t border-gray-100 dark:border-gray-700">
+            <button type="submit" class="btn-primary py-4 px-10 text-lg shadow-xl shadow-primary-500/20">
+              Save Changes
             </button>
           </div>
         </form>
       </div>
 
-      <div class="card mt-8 border-red-100 bg-red-50/10">
-        <h3 class="text-xl font-bold text-red-600 mb-4">Security</h3>
-        <p class="text-sm text-gray-600 mb-6">Change your password or manage sessions.</p>
-        <div class="flex gap-4">
-          <a href="/forgot-password" class="btn" style="background: white; border: 1px solid var(--border); font-size: 0.875rem;">Change Password</a>
-          <button class="btn" style="background: white; border: 1px solid var(--border); font-size: 0.875rem; color: #dc2626;">Deactivate Account</button>
+      <div class="card border-none shadow-xl p-8 bg-red-50/30 dark:bg-red-900/10">
+        <h3 class="text-xl font-black text-red-600 mb-2">Danger Zone</h3>
+        <p class="text-sm text-gray-500 font-medium mb-8">Permanently delete your account and all associated data. This action cannot be undone.</p>
+        <div class="flex flex-wrap gap-4">
+          <a href="/forgot-password" class="btn bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 px-6 py-3 font-bold shadow-sm hover:bg-gray-50 transition">
+            Change Password
+          </a>
+          <button class="btn bg-red-600 text-white px-6 py-3 font-bold shadow-lg shadow-red-500/20 hover:bg-red-700 transition">
+            Delete Account
+          </button>
         </div>
       </div>
     </div>

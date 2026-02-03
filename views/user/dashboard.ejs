@@ -1,127 +1,124 @@
-<div class="space-y-8">
-  <div class="flex items-center justify-between">
-    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Welcome back, <%= user.email.split('@')[0] %>!</h1>
-    <div class="flex space-x-2">
-      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium <%= user.verificationStatus === 'Verified' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' %>">
-        <i class="fas <%= user.verificationStatus === 'Verified' ? 'fa-check-circle' : 'fa-clock' %> mr-1"></i>
-        <%= user.verificationStatus %>
-      </span>
+<div class="space-y-10">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div>
+      <h1 class="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+        Hello, <span class="text-primary-600"><%= user.email.split('@')[0] %></span>
+      </h1>
+      <p class="text-gray-500 dark:text-gray-400 mt-2 font-medium">Here's what's happening with your accounts today.</p>
+    </div>
+    <div class="flex items-center gap-3">
+       <div class="text-right hidden md:block">
+         <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Verification</p>
+         <p class="text-sm font-bold <%= user.verificationStatus === 'Verified' ? 'text-green-600' : 'text-amber-500' %>"><%= user.verificationStatus %></p>
+       </div>
+       <div class="w-12 h-12 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-xl text-gray-500 border border-gray-200 dark:border-gray-700">
+         <i class="fas fa-user"></i>
+       </div>
     </div>
   </div>
 
-  <!-- Quick Stats -->
+  <!-- Wallet Grid -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <% wallets.forEach(wallet => { %>
-      <div class="card bg-gradient-to-br from-primary-600 to-primary-800 text-white border-none shadow-lg transform hover:-translate-y-1 transition duration-300">
-        <div class="flex justify-between items-start mb-4">
-          <div>
-            <p class="text-primary-100 text-sm font-medium uppercase tracking-wider"><%= wallet.currency %> Wallet</p>
-            <h3 class="text-3xl font-bold mt-1"><%= wallet.balance.toLocaleString(undefined, { minimumFractionDigits: 2 }) %></h3>
-          </div>
-          <div class="p-3 bg-white/10 rounded-lg">
-            <i class="fas fa-wallet text-xl"></i>
-          </div>
+    <% wallets.forEach((wallet, index) => { %>
+      <div class="card relative overflow-hidden border-none shadow-2xl transition-all duration-300 hover:scale-[1.02] <%= index === 0 ? 'bg-primary-600 text-white' : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white' %>">
+        <div class="absolute -right-6 -top-6 opacity-10">
+          <i class="fas fa-wallet text-9xl rotate-12"></i>
         </div>
-        <div class="flex justify-between text-sm text-primary-100 border-t border-white/10 pt-4">
-          <span>Locked: <%= wallet.lockedBalance %></span>
-          <a href="/wallets" class="hover:underline font-medium">Manage <i class="fas fa-chevron-right ml-1"></i></a>
+        <div class="relative z-10 p-2">
+          <div class="flex items-center justify-between mb-8">
+            <div class="px-3 py-1 rounded-lg <%= index === 0 ? 'bg-white/20' : 'bg-primary-100 dark:bg-primary-900/30 text-primary-600' %> text-xs font-black uppercase tracking-widest">
+              <%= wallet.currency %>
+            </div>
+            <i class="fas fa-ellipsis-v opacity-50 cursor-pointer hover:opacity-100"></i>
+          </div>
+          <p class="text-xs <%= index === 0 ? 'text-primary-100' : 'text-gray-400' %> font-bold uppercase tracking-widest mb-1">Available Balance</p>
+          <h2 class="text-4xl font-black mb-8 tabular-nums">
+            <%= wallet.balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %>
+          </h2>
+          <div class="flex items-center justify-between pt-4 border-t <%= index === 0 ? 'border-white/10' : 'border-gray-100 dark:border-gray-700' %>">
+            <div class="flex gap-4">
+               <a href="/deposit" class="text-xs font-bold hover:underline">Deposit</a>
+               <a href="/withdraw" class="text-xs font-bold hover:underline">Withdraw</a>
+            </div>
+            <i class="fas fa-arrow-right opacity-50"></i>
+          </div>
         </div>
       </div>
     <% }) %>
-    <% if (wallets.length === 0) { %>
-      <div class="card flex flex-col items-center justify-center py-12 border-dashed">
-        <i class="fas fa-plus-circle text-4xl text-gray-300 mb-4"></i>
-        <p class="text-gray-500">No active wallets</p>
-        <a href="/wallets" class="text-primary-600 font-bold mt-2">Open a Wallet</a>
-      </div>
+    <% if (wallets.length < 3) { %>
+      <a href="/trade" class="card border-2 border-dashed border-gray-200 dark:border-gray-700 bg-transparent flex flex-col items-center justify-center text-center group hover:border-primary-500 transition-all">
+         <div class="w-12 h-12 rounded-full bg-gray-50 dark:bg-gray-800 flex items-center justify-center mb-3 group-hover:bg-primary-600 group-hover:text-white transition-colors">
+           <i class="fas fa-plus"></i>
+         </div>
+         <p class="text-sm font-bold text-gray-400 group-hover:text-primary-600 transition-colors">Open New Wallet</p>
+      </a>
     <% } %>
   </div>
 
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-    <!-- Recent Transactions -->
-    <div class="lg:col-span-2 space-y-4">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <!-- Transactions -->
+    <div class="lg:col-span-8 space-y-6">
       <div class="flex items-center justify-between">
-        <h2 class="text-xl font-bold text-gray-900 dark:text-white text-gray-900 dark:text-white">Recent Transactions</h2>
-        <a href="/transactions" class="text-primary-600 hover:underline text-sm font-medium">View all</a>
+        <h3 class="text-2xl font-black text-gray-900 dark:text-white tracking-tight">Recent Activity</h3>
+        <a href="/transactions" class="text-sm font-bold text-primary-600 hover:text-primary-700">View History <i class="fas fa-arrow-right ml-1"></i></a>
       </div>
-      <div class="card p-0 overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead class="bg-gray-50 dark:bg-gray-800/50">
-              <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-              </tr>
-            </thead>
-            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-              <% transactions.forEach(tx => { %>
-                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex items-center">
-                      <div class="flex-shrink-0 h-10 w-10 flex items-center justify-center rounded-full <%= tx.type === 'Deposit' ? 'bg-green-100 text-green-600' : 'bg-blue-100 text-blue-600' %>">
-                        <i class="fas <%= tx.type === 'Deposit' ? 'fa-arrow-down' : (tx.type === 'Withdrawal' ? 'fa-arrow-up' : 'fa-exchange-alt') %>"></i>
-                      </div>
-                      <div class="ml-4">
-                        <div class="text-sm font-medium text-gray-900 dark:text-white"><%= tx.type %></div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm <%= tx.type === 'Deposit' ? 'text-green-600' : (tx.type === 'Withdrawal' ? 'text-red-600' : 'text-gray-900 dark:text-white') %> font-bold">
-                      <%= tx.type === 'Deposit' ? '+' : '-' %><%= tx.amount %> <%= tx.currency %>
-                    </div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <%= tx.status === 'Completed' ? 'bg-green-100 text-green-800' : (tx.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') %>">
-                      <%= tx.status %>
-                    </span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                    <%= tx.createdAt.toLocaleDateString() %>
-                  </td>
-                </tr>
-              <% }) %>
-              <% if (transactions.length === 0) { %>
-                <tr><td colspan="4" class="px-6 py-12 text-center text-gray-500">No transactions yet.</td></tr>
-              <% } %>
-            </tbody>
-          </table>
+      <div class="card p-0 overflow-hidden border-none shadow-xl">
+        <div class="divide-y divide-gray-100 dark:divide-gray-700/50">
+          <% transactions.slice(0, 5).forEach(tx => { %>
+            <div class="px-6 py-5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl flex items-center justify-center <%= tx.type === 'Deposit' ? 'bg-green-100 text-green-600' : 'bg-gray-100 dark:bg-gray-700 text-gray-500' %>">
+                  <i class="fas <%= tx.type === 'Deposit' ? 'fa-arrow-down' : (tx.type === 'Withdrawal' ? 'fa-arrow-up' : 'fa-exchange-alt') %>"></i>
+                </div>
+                <div>
+                  <p class="font-black text-gray-900 dark:text-white"><%= tx.type %></p>
+                  <p class="text-xs text-gray-400 font-medium"><%= tx.createdAt.toDateString() %></p>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="font-black tabular-nums <%= tx.type === 'Deposit' ? 'text-green-600' : 'text-gray-900 dark:text-white' %>">
+                  <%= tx.type === 'Deposit' ? '+' : '-' %> <%= tx.amount.toFixed(2) %> <%= tx.currency %>
+                </p>
+                <p class="text-[10px] font-bold uppercase tracking-widest <%= tx.status === 'Completed' ? 'text-green-500' : 'text-amber-500' %>"><%= tx.status %></p>
+              </div>
+            </div>
+          <% }) %>
+          <% if (transactions.length === 0) { %>
+            <div class="px-6 py-12 text-center">
+               <p class="text-gray-400 font-medium">No recent activity found.</p>
+            </div>
+          <% } %>
         </div>
       </div>
     </div>
 
-    <!-- Quick Actions -->
-    <div class="space-y-4">
-      <h2 class="text-xl font-bold text-gray-900 dark:text-white">Quick Actions</h2>
+    <!-- Quick Actions & Side Info -->
+    <div class="lg:col-span-4 space-y-6">
+      <h3 class="text-2xl font-black text-gray-900 dark:text-white tracking-tight">Quick Actions</h3>
       <div class="grid grid-cols-2 gap-4">
-        <a href="/deposit" class="card p-4 flex flex-col items-center hover:border-primary-500 transition group text-center">
-          <i class="fas fa-plus-circle text-2xl text-primary-600 mb-2 group-hover:scale-110 transition"></i>
-          <span class="text-sm font-bold">Deposit</span>
+        <a href="/transfer" class="card p-6 flex flex-col items-center justify-center text-center gap-3 hover:bg-primary-50 dark:hover:bg-primary-900/10 hover:border-primary-200 transition-all group">
+          <div class="w-12 h-12 rounded-2xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 group-hover:scale-110 transition-transform">
+            <i class="fas fa-paper-plane text-xl"></i>
+          </div>
+          <span class="text-sm font-black">Transfer</span>
         </a>
-        <a href="/withdraw" class="card p-4 flex flex-col items-center hover:border-primary-500 transition group text-center">
-          <i class="fas fa-minus-circle text-2xl text-primary-600 mb-2 group-hover:scale-110 transition"></i>
-          <span class="text-sm font-bold">Withdraw</span>
-        </a>
-        <a href="/transfer" class="card p-4 flex flex-col items-center hover:border-primary-500 transition group text-center">
-          <i class="fas fa-paper-plane text-2xl text-primary-600 mb-2 group-hover:scale-110 transition"></i>
-          <span class="text-sm font-bold">Transfer</span>
-        </a>
-        <a href="/trade" class="card p-4 flex flex-col items-center hover:border-primary-500 transition group text-center">
-          <i class="fas fa-sync text-2xl text-primary-600 mb-2 group-hover:scale-110 transition"></i>
-          <span class="text-sm font-bold">Trade</span>
+        <a href="/trade" class="card p-6 flex flex-col items-center justify-center text-center gap-3 hover:bg-primary-50 dark:hover:bg-primary-900/10 hover:border-primary-200 transition-all group">
+          <div class="w-12 h-12 rounded-2xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 group-hover:scale-110 transition-transform">
+            <i class="fas fa-sync text-xl"></i>
+          </div>
+          <span class="text-sm font-black">Trade</span>
         </a>
       </div>
 
-      <div class="card bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800 p-6">
-        <h4 class="font-bold text-blue-900 dark:text-blue-400 flex items-center">
-          <i class="fas fa-lightbulb mr-2"></i> Did you know?
-        </h4>
-        <p class="text-sm text-blue-800 dark:text-blue-300 mt-2">
-          You can earn up to 5% annual interest on your USD wallet balance.
+      <div class="card bg-gradient-to-br from-gray-900 to-black text-white border-none p-8 overflow-hidden relative shadow-2xl">
+        <div class="absolute -right-4 -bottom-4 opacity-20">
+          <i class="fas fa-shield-alt text-8xl"></i>
+        </div>
+        <h4 class="text-xl font-black mb-4 relative z-10 tracking-tight">Level Up Your Security</h4>
+        <p class="text-sm text-gray-400 mb-6 relative z-10 leading-relaxed">
+          Enable Two-Factor Authentication (2FA) and Biometric Login to keep your assets safe from unauthorized access.
         </p>
-        <button class="mt-4 text-sm font-bold text-blue-600 dark:text-blue-400 hover:underline">Learn more <i class="fas fa-arrow-right ml-1"></i></button>
+        <a href="/profile/security" class="btn bg-white text-black text-xs font-black uppercase tracking-widest py-3 px-6 hover:bg-gray-200 transition-colors inline-block">Secure Now</a>
       </div>
     </div>
   </div>

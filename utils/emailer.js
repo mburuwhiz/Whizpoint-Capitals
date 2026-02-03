@@ -1,4 +1,6 @@
 const nodemailer = require('nodemailer');
+const ejs = require('ejs');
+const path = require('path');
 
 const sendEmail = async (options) => {
   // Check user preferences if available
@@ -31,12 +33,18 @@ const sendEmail = async (options) => {
     },
   });
 
+  let html = options.html;
+  if (options.template) {
+    const templatePath = path.join(__dirname, '../views/emails', `${options.template}.ejs`);
+    html = await ejs.renderFile(templatePath, options.templateData || {});
+  }
+
   const message = {
     from: `${process.env.COMPANY_NAME} <${process.env.NOREPLY_EMAIL}>`,
     to: options.email,
     subject: options.subject,
     text: options.message,
-    html: options.html
+    html: html
   };
 
   const info = await transporter.sendMail(message);

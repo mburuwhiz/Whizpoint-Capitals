@@ -1,23 +1,61 @@
-<h1>Withdraw</h1>
-<% if (locals.error) { %> <p style="color: red;"><%= error %></p> <% } %>
+<div class="max-w-2xl mx-auto">
+  <div class="text-center mb-12">
+    <div class="inline-flex items-center justify-center w-20 h-20 bg-red-100 dark:bg-red-900/30 rounded-full text-red-600 text-3xl mb-4">
+      <i class="fas fa-arrow-up"></i>
+    </div>
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Withdraw Funds</h1>
+    <p class="text-gray-500 dark:text-gray-400 mt-2">Transfer money from your Whizpoint wallet to your bank or mobile money.</p>
+  </div>
 
-<form action="/withdraw" method="POST">
-  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-  <div>
-    <label>Amount:</label>
-    <input type="number" name="amount" required min="1" step="0.01">
+  <div class="card shadow-xl">
+    <% if (locals.error) { %>
+      <div class="mb-6 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-400 p-4 rounded text-sm text-red-700 dark:text-red-400">
+        <i class="fas fa-exclamation-triangle mr-2"></i> <%= error %>
+      </div>
+    <% } %>
+
+    <form action="/withdraw" method="POST" class="space-y-8">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+      <div class="space-y-6">
+        <div>
+          <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Amount to Withdraw</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+              <i class="fas fa-money-bill-wave"></i>
+            </div>
+            <input type="number" name="amount" required min="1" step="0.01" class="input-field pl-10 text-xl font-bold" placeholder="0.00">
+          </div>
+          <p class="text-xs text-gray-500 mt-2">Minimum withdrawal: $10.00 or equivalent.</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Select Wallet</label>
+          <select name="currency" class="input-field text-lg font-bold">
+            <option value="USD">USD - US Dollar</option>
+            <option value="KES">KES - Kenyan Shilling</option>
+            <option value="UGX">UGX - Ugandan Shilling</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Withdrawal Destination</label>
+          <textarea name="accountDetails" required class="input-field min-h-[100px]" placeholder="Enter Bank Name, Account Number, or Mobile Money details..."></textarea>
+        </div>
+      </div>
+
+      <div class="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-xl border border-amber-100 dark:border-amber-800 flex items-start">
+        <i class="fas fa-shield-check text-amber-600 mt-1 mr-3"></i>
+        <p class="text-xs text-amber-800 dark:text-amber-400">
+          For security, withdrawals are processed within 2-24 hours after a manual review by our compliance team. Ensure your account details are correct to avoid delays.
+        </p>
+      </div>
+
+      <div>
+        <button type="submit" class="w-full btn-primary py-4 text-lg shadow-lg flex items-center justify-center">
+           Withdraw Funds <i class="fas fa-arrow-right ml-2 text-sm"></i>
+        </button>
+      </div>
+    </form>
   </div>
-  <div>
-    <label>Currency:</label>
-    <select name="currency">
-      <option value="USD">USD</option>
-      <option value="KES">KES</option>
-      <option value="UGX">UGX</option>
-    </select>
-  </div>
-  <div>
-    <label>Account Details (e.g., Bank/Phone):</label>
-    <textarea name="accountDetails" required></textarea>
-  </div>
-  <button type="submit">Withdraw</button>
-</form>
+</div>

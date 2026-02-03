@@ -2,6 +2,7 @@ const User = require('../models/User');
 const Wallet = require('../models/Wallet');
 const jwt = require('jsonwebtoken');
 const sendEmail = require('../utils/emailer');
+const crypto = require('crypto');
 
 exports.getRegister = (req, res) => {
   res.render('auth/register', { title: 'Register' });
@@ -27,10 +28,15 @@ exports.postRegister = async (req, res) => {
       return res.render('auth/register', { error: 'Email already exists', title: 'Register', captchaSvg: captcha.data });
     }
 
+    const verificationToken = crypto.randomBytes(20).toString('hex');
+    const verificationTokenHash = crypto.createHash('sha256').update(verificationToken).digest('hex');
+
     user = await User.create({
       email,
       password,
-      preferredCurrency
+      preferredCurrency,
+      emailVerificationToken: verificationTokenHash,
+      emailVerificationExpire: Date.now() + 24 * 60 * 60 * 1000 // 24 hours
     });
 
     // Create initial wallet
@@ -40,7 +46,22 @@ exports.postRegister = async (req, res) => {
       balance: 0
     });
 
-    res.redirect('/login');
+    const verifyUrl = `${req.protocol}://${req.get('host')}/verify-email/${verificationToken}`;
+
+    await sendEmail({
+      email: user.email,
+      subject: 'Verify your email',
+      message: `Please verify your email by clicking: ${verifyUrl}`,
+      type: 'verification',
+      template: 'verify-email',
+      user: user,
+      templateData: { verifyUrl }
+    });
+
+    res.render('auth/login', {
+      message: 'Registration successful! Please check your email to verify your account.',
+      title: 'Login'
+    });
   } catch (err) {
     res.render('auth/register', { error: err.message, title: 'Register' });
   }
@@ -70,6 +91,10 @@ exports.postLogin = async (req, res) => {
       return res.render('auth/login', { error: 'Invalid credentials', title: 'Login', captchaSvg: captcha.data });
     }
 
+    if (!user.isEmailVerified) {
+      return res.render('auth/login', { error: 'Please verify your email address before logging in.', title: 'Login' });
+    }
+
     req.session.userId = user._id;
 
     // Send login alert email if enabled
@@ -78,7 +103,9 @@ exports.postLogin = async (req, res) => {
       subject: 'Login Alert',
       message: `You have successfully logged into your ${process.env.COMPANY_NAME} account.`,
       user: user,
-      type: 'login'
+      type: 'login',
+      template: 'login-notice',
+      templateData: { user }
     });
 
     res.redirect('/dashboard');
@@ -96,8 +123,6 @@ exports.logout = (req, res) => {
 exports.getForgotPassword = (req, res) => {
   res.render('auth/forgot-password', { title: 'Forgot Password' });
 };
-
-const crypto = require('crypto');
 
 exports.postForgotPassword = async (req, res) => {
   try {
@@ -166,6 +191,29 @@ exports.postResetPassword = async (req, res) => {
     await user.save();
 
     res.redirect('/login');
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+};
+
+exports.verifyEmail = async (req, res) => {
+  try {
+    const emailVerificationToken = crypto.createHash('sha256').update(req.params.token).digest('hex');
+    const user = await User.findOne({
+      emailVerificationToken,
+      emailVerificationExpire: { $gt: Date.now() }
+    });
+
+    if (!user) {
+      return res.render('auth/login', { error: 'Invalid or expired verification link', title: 'Login' });
+    }
+
+    user.isEmailVerified = true;
+    user.emailVerificationToken = undefined;
+    user.emailVerificationExpire = undefined;
+    await user.save();
+
+    res.render('auth/login', { message: 'Email verified successfully! You can now login.', title: 'Login' });
   } catch (err) {
     res.status(500).send(err.message);
   }

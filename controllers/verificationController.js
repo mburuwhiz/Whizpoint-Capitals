@@ -16,12 +16,14 @@ exports.payVerificationFee = async (req, res) => {
   try {
     const feeAmount = parseFloat(process.env.VERIFICATION_FEE || 1.0);
     const currency = 'USD'; // Fee is in USD as per requirements
+    const verification = await Verification.findOne({ userId: req.user._id });
 
     const wallet = await Wallet.findOne({ userId: req.user._id, currency });
     if (!wallet || wallet.balance < feeAmount) {
       return res.render('user/verification', {
         error: `Insufficient balance to pay the $${feeAmount} verification fee. Please deposit funds first.`,
-        title: 'Account Verification'
+        title: 'Account Verification',
+        verification
       });
     }
 
@@ -30,12 +32,12 @@ exports.payVerificationFee = async (req, res) => {
     await wallet.save();
 
     // Create verification record if not exists
-    let verification = await Verification.findOne({ userId: req.user._id });
-    if (!verification) {
-      verification = new Verification({ userId: req.user._id });
+    let vRecord = verification;
+    if (!vRecord) {
+      vRecord = new Verification({ userId: req.user._id });
     }
-    verification.feePaid = true;
-    await verification.save();
+    vRecord.feePaid = true;
+    await vRecord.save();
 
     // Log transaction
     await Transaction.create({
@@ -49,7 +51,8 @@ exports.payVerificationFee = async (req, res) => {
 
     res.redirect('/verification');
   } catch (err) {
-    res.render('user/verification', { error: err.message, title: 'Account Verification' });
+    const verification = await Verification.findOne({ userId: req.user._id });
+    res.render('user/verification', { error: err.message, title: 'Account Verification', verification });
   }
 };
 

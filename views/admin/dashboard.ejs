@@ -1,97 +1,101 @@
-<div class="space-y-8">
-  <div class="flex items-center justify-between">
-    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Admin Command Center</h1>
-    <div class="flex space-x-3">
-       <span class="bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400 px-4 py-2 rounded-lg text-sm font-bold">
-         <i class="fas fa-shield-alt mr-2"></i> System Health: Optimal
-       </span>
+<div class="space-y-10">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div>
+      <h1 class="text-4xl font-black text-gray-900 dark:text-white tracking-tight">Admin <span class="text-primary-600">Command Center</span></h1>
+      <p class="text-gray-500 dark:text-gray-400 mt-2 font-medium">Enterprise-level platform management and oversight.</p>
+    </div>
+    <div class="flex items-center gap-3">
+       <div class="flex items-center px-4 py-2 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-xl text-xs font-black uppercase tracking-widest border border-green-200 dark:border-green-800">
+         <i class="fas fa-shield-check mr-2"></i> System Health: Optimal
+       </div>
     </div>
   </div>
 
   <!-- Stats Grid -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-    <div class="card border-l-4 border-l-primary-600">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Total Users</p>
-          <h3 class="text-4xl font-extrabold mt-1"><%= userCount %></h3>
-        </div>
-        <div class="p-4 bg-primary-50 dark:bg-primary-900/20 rounded-2xl text-primary-600">
-          <i class="fas fa-users text-2xl"></i>
-        </div>
+    <div class="card border-none shadow-2xl bg-white dark:bg-gray-800 p-8 overflow-hidden relative">
+      <div class="absolute -right-4 -bottom-4 opacity-5">
+        <i class="fas fa-users text-9xl"></i>
+      </div>
+      <div class="relative z-10">
+        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Platform Population</p>
+        <h3 class="text-5xl font-black text-gray-900 dark:text-white tabular-nums tracking-tighter"><%= userCount %></h3>
+        <p class="text-xs text-green-500 font-bold mt-4 flex items-center">
+          <i class="fas fa-arrow-trend-up mr-1"></i> +12% from last week
+        </p>
       </div>
     </div>
 
-    <div class="card border-l-4 border-l-yellow-500">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Pending KYC</p>
-          <h3 class="text-4xl font-extrabold mt-1"><%= pendingVerifications %></h3>
-        </div>
-        <div class="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-2xl text-yellow-600">
-          <i class="fas fa-user-check text-2xl"></i>
-        </div>
+    <div class="card border-none shadow-2xl bg-white dark:bg-gray-800 p-8 overflow-hidden relative">
+      <div class="absolute -right-4 -bottom-4 opacity-5 text-amber-500">
+        <i class="fas fa-id-card text-9xl"></i>
+      </div>
+      <div class="relative z-10">
+        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Pending Verifications</p>
+        <h3 class="text-5xl font-black text-amber-500 tabular-nums tracking-tighter"><%= pendingVerifications %></h3>
+        <a href="/admin/verifications" class="text-xs font-black text-primary-600 uppercase tracking-widest mt-4 inline-block hover:underline">Review Now <i class="fas fa-arrow-right ml-1"></i></a>
       </div>
     </div>
 
-    <div class="card border-l-4 border-l-green-500">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Global Transact.</p>
-          <h3 class="text-4xl font-extrabold mt-1"><%= totalTransactions %></h3>
-        </div>
-        <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-2xl text-green-600">
-          <i class="fas fa-exchange-alt text-2xl"></i>
-        </div>
+    <div class="card border-none shadow-2xl bg-white dark:bg-gray-800 p-8 overflow-hidden relative text-gray-900 dark:text-white">
+      <div class="absolute -right-4 -bottom-4 opacity-5 text-primary-600">
+        <i class="fas fa-exchange-alt text-9xl"></i>
+      </div>
+      <div class="relative z-10">
+        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Total Transactions</p>
+        <h3 class="text-5xl font-black tabular-nums tracking-tighter"><%= totalTransactions %></h3>
+        <p class="text-xs text-primary-600 font-bold mt-4 flex items-center">
+          <i class="fas fa-history mr-1"></i> All systems nominal
+        </p>
       </div>
     </div>
   </div>
 
-  <!-- Navigation Grid -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-    <a href="/admin/users" class="card hover:shadow-lg transition group border-none bg-white dark:bg-gray-800">
-      <div class="flex items-center space-x-4">
-        <div class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition">
-          <i class="fas fa-user-cog"></i>
-        </div>
-        <span class="font-bold text-gray-700 dark:text-gray-300">Manage Users</span>
-      </div>
+  <!-- Primary Navigation -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+    <a href="/admin/users" class="card border-none shadow-xl p-6 flex flex-col items-center gap-3 group hover:bg-primary-600 transition-all duration-300">
+       <div class="w-14 h-14 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-2xl flex items-center justify-center text-xl group-hover:bg-white group-hover:text-primary-600 transition-colors">
+          <i class="fas fa-user-gear"></i>
+       </div>
+       <span class="text-sm font-black uppercase tracking-widest text-gray-600 dark:text-gray-400 group-hover:text-white transition-colors text-center">User Accounts</span>
     </a>
-    <a href="/admin/verifications" class="card hover:shadow-lg transition group border-none bg-white dark:bg-gray-800">
-      <div class="flex items-center space-x-4">
-        <div class="w-12 h-12 rounded-xl bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 group-hover:bg-orange-600 group-hover:text-white transition">
-          <i class="fas fa-id-card"></i>
-        </div>
-        <span class="font-bold text-gray-700 dark:text-gray-300">KYC Reviews</span>
-      </div>
+    <a href="/admin/verifications" class="card border-none shadow-xl p-6 flex flex-col items-center gap-3 group hover:bg-amber-500 transition-all duration-300">
+       <div class="w-14 h-14 bg-amber-100 dark:bg-amber-900/30 text-amber-600 rounded-2xl flex items-center justify-center text-xl group-hover:bg-white group-hover:text-amber-500 transition-colors">
+          <i class="fas fa-fingerprint"></i>
+       </div>
+       <span class="text-sm font-black uppercase tracking-widest text-gray-600 dark:text-gray-400 group-hover:text-white transition-colors text-center">KYC Compliance</span>
     </a>
-    <a href="/admin/disputes" class="card hover:shadow-lg transition group border-none bg-white dark:bg-gray-800">
-      <div class="flex items-center space-x-4">
-        <div class="w-12 h-12 rounded-xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-red-600 group-hover:bg-red-600 group-hover:text-white transition">
-          <i class="fas fa-gavel"></i>
-        </div>
-        <span class="font-bold text-gray-700 dark:text-gray-300">Disputes</span>
-      </div>
+    <a href="/admin/disputes" class="card border-none shadow-xl p-6 flex flex-col items-center gap-3 group hover:bg-red-600 transition-all duration-300">
+       <div class="w-14 h-14 bg-red-100 dark:bg-red-900/30 text-red-600 rounded-2xl flex items-center justify-center text-xl group-hover:bg-white group-hover:text-red-600 transition-colors">
+          <i class="fas fa-balance-scale"></i>
+       </div>
+       <span class="text-sm font-black uppercase tracking-widest text-gray-600 dark:text-gray-400 group-hover:text-white transition-colors text-center">Dispute Tickets</span>
     </a>
-    <a href="/admin/logs" class="card hover:shadow-lg transition group border-none bg-white dark:bg-gray-800">
-      <div class="flex items-center space-x-4">
-        <div class="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition">
+    <a href="/admin/logs" class="card border-none shadow-xl p-6 flex flex-col items-center gap-3 group hover:bg-indigo-600 transition-all duration-300">
+       <div class="w-14 h-14 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 rounded-2xl flex items-center justify-center text-xl group-hover:bg-white group-hover:text-indigo-600 transition-colors">
           <i class="fas fa-terminal"></i>
-        </div>
-        <span class="font-bold text-gray-700 dark:text-gray-300">Audit Logs</span>
-      </div>
+       </div>
+       <span class="text-sm font-black uppercase tracking-widest text-gray-600 dark:text-gray-400 group-hover:text-white transition-colors text-center">Audit Logs</span>
     </a>
   </div>
 
-  <!-- Recent Activity Teaser -->
-  <div class="card">
-    <div class="flex items-center justify-between mb-6">
-      <h2 class="text-xl font-bold">Global Activity Monitor</h2>
-      <span class="text-xs font-bold text-primary-600 uppercase tracking-widest"><i class="fas fa-circle text-[8px] mr-1 animate-pulse"></i> Live Updates</span>
-    </div>
-    <div class="space-y-4">
-       <!-- Placeholder for live logs -->
-       <p class="text-center text-gray-400 py-12 italic">System activity logs streaming...</p>
-    </div>
+  <!-- Real-time Monitor Placeholder -->
+  <div class="card border-none shadow-2xl p-0 overflow-hidden bg-gray-900 text-white">
+     <div class="px-8 py-5 bg-gray-800 flex items-center justify-between">
+        <h3 class="text-sm font-black uppercase tracking-widest flex items-center">
+           <i class="fas fa-pulse text-green-500 mr-2 animate-pulse"></i> Global Event Monitor
+        </h3>
+        <div class="flex gap-2">
+           <div class="w-2 h-2 rounded-full bg-red-500"></div>
+           <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+           <div class="w-2 h-2 rounded-full bg-green-500"></div>
+        </div>
+     </div>
+     <div class="p-12 text-center">
+        <div class="inline-block animate-spin mb-6">
+           <i class="fas fa-spinner-third text-4xl opacity-20"></i>
+        </div>
+        <p class="text-gray-500 font-bold uppercase tracking-widest text-xs">Waiting for inbound stream connection...</p>
+     </div>
   </div>
 </div>
