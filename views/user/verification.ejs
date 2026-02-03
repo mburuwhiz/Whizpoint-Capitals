@@ -1,0 +1,41 @@
+<h1>Account Verification</h1>
+<% if (locals.reason === 'verification_required') { %>
+  <p style="color: blue;">Verification is required before you can withdraw or transfer funds.</p>
+<% } %>
+<% if (locals.error) { %> <p style="color: red;"><%= error %></p> <% } %>
+
+<div class="verification-status">
+  <p>Current Status: <strong><%= user.verificationStatus %></strong></p>
+</div>
+
+<% if (user.verificationStatus === 'Unverified') { %>
+  <% if (!verification || !verification.feePaid) { %>
+    <div class="step">
+      <h3>Step 1: Pay Verification Fee</h3>
+      <p>A non-refundable (until verified) fee of $1.00 is required for verification.</p>
+      <form action="/verification/pay-fee" method="POST">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button type="submit">Pay $1.00 Fee from Wallet</button>
+      </form>
+    </div>
+  <% } else { %>
+    <div class="step">
+      <h3>Step 2: Submit KYC Documents</h3>
+      <p>Please upload your ID or Passport for review.</p>
+      <form action="/verification/submit-kyc" method="POST" enctype="multipart/form-data">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div>
+          <label>ID Document:</label>
+          <input type="file" name="id_doc" required>
+        </div>
+        <button type="submit">Submit for Review</button>
+      </form>
+    </div>
+  <% } %>
+<% } else if (user.verificationStatus === 'Pending') { %>
+  <p>Your verification is currently under review. This usually takes 24-48 hours.</p>
+<% } else if (user.verificationStatus === 'Verified') { %>
+  <p style="color: green;">Congratulations! Your account is fully verified.</p>
+<% } else if (user.verificationStatus === 'Rejected') { %>
+  <p style="color: red;">Your verification was rejected. Please contact support.</p>
+<% } %>

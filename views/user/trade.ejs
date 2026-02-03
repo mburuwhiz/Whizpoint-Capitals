@@ -1,0 +1,38 @@
+<h1>Trade / Currency Exchange</h1>
+<% if (locals.error) { %> <p style="color: red;"><%= error %></p> <% } %>
+
+<form action="/trade" method="POST">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <div>
+    <label>From Currency:</label>
+    <select name="fromCurrency">
+      <% wallets.forEach(w => { %>
+        <option value="<%= w.currency %>"><%= w.currency %> (Bal: <%= w.balance %>)</option>
+      <% }) %>
+    </select>
+  </div>
+  <div>
+    <label>To Currency:</label>
+    <select name="toCurrency">
+      <option value="USD">USD</option>
+      <option value="KES">KES</option>
+      <option value="UGX">UGX</option>
+    </select>
+  </div>
+  <div>
+    <label>Amount to Exchange:</label>
+    <input type="number" name="amount" required step="0.01" min="0.01">
+  </div>
+  <button type="submit">Exchange</button>
+</form>
+
+<h3>Current Rates</h3>
+<ul>
+  <% for (const from in exchangeRates) { %>
+    <li>1 <%= from %> =
+      <% for (const to in exchangeRates[from]) { %>
+        <%= exchangeRates[from][to].toFixed(4) %> <%= to %> |
+      <% } %>
+    </li>
+  <% } %>
+</ul>

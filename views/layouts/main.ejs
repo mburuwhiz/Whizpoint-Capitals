@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> | <%= process.env.COMPANY_NAME %></title>
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body class="light-mode">
+  <header>
+    <nav>
+      <a href="/">Home</a>
+      <% if (locals.user) { %>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/wallets">Wallets</a>
+        <a href="/trade">Trade</a>
+        <a href="/profile">Profile</a>
+        <% if (user.role === 'admin') { %>
+          <a href="/admin">Admin</a>
+        <% } %>
+        <a href="/logout">Logout</a>
+      <% } else { %>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+      <% } %>
+      <button id="theme-toggle">Toggle Dark Mode</button>
+    </nav>
+  </header>
+
+  <main>
+    <%- body %>
+  </main>
+
+  <footer>
+    <p>&copy; <%= new Date().getFullYear() %> <%= process.env.BUSINESS_LEGAL_NAME %>. All rights reserved.</p>
+    <nav>
+      <a href="/about">About</a> |
+      <a href="/fees">Fees</a> |
+      <a href="/terms">Terms</a> |
+      <a href="/privacy">Privacy</a>
+    </nav>
+  </footer>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

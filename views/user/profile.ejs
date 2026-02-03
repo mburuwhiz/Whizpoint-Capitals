@@ -1,0 +1,21 @@
+<h1>Profile Settings</h1>
+<p>Email: <%= user.email %></p>
+<p>Verification Status: <%= user.verificationStatus %></p>
+
+<form action="/profile" method="POST">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <div>
+    <label>Preferred Currency:</label>
+    <select name="preferredCurrency">
+      <option value="USD" <%= user.preferredCurrency === 'USD' ? 'selected' : '' %>>USD</option>
+      <option value="KES" <%= user.preferredCurrency === 'KES' ? 'selected' : '' %>>KES</option>
+      <option value="UGX" <%= user.preferredCurrency === 'UGX' ? 'selected' : '' %>>UGX</option>
+    </select>
+  </div>
+  <button type="submit">Update Profile</button>
+</form>
+
+<hr>
+<p><a href="/profile/notifications">Manage Notification Settings</a></p>
+<p><a href="/profile/disputes">My Disputes</a></p>
+<p><a href="/verification">Account Verification</a></p>

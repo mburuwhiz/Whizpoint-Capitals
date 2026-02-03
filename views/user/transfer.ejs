@@ -1,0 +1,28 @@
+<h1>Internal Transfer</h1>
+<% if (locals.error) { %> <p style="color: red;"><%= error %></p> <% } %>
+<% if (locals.message) { %> <p style="color: green;"><%= message %></p> <% } %>
+
+<form action="/transfer" method="POST">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <div>
+    <label>Recipient Email:</label>
+    <input type="email" name="recipientEmail" required>
+  </div>
+  <div>
+    <label>Amount:</label>
+    <input type="number" name="amount" required min="0.01" step="0.01">
+  </div>
+  <div>
+    <label>Currency:</label>
+    <select name="currency">
+      <option value="USD">USD</option>
+      <option value="KES">KES</option>
+      <option value="UGX">UGX</option>
+    </select>
+  </div>
+  <div>
+    <label><%= captchaQuestion %></label>
+    <input type="number" name="captcha" required>
+  </div>
+  <button type="submit">Transfer</button>
+</form>
