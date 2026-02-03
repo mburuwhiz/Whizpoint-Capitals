@@ -1,0 +1,11 @@
+<h1>My Wallets</h1>
+<ul>
+  <% wallets.forEach(wallet => { %>
+    <li>
+      <strong><%= wallet.currency %></strong>: <%= wallet.balance %>
+      <br>
+      <small>Locked: <%= wallet.lockedBalance %></small>
+    </li>
+  <% }) %>
+</ul>
+<p><a href="/deposit">Deposit Funds</a> | <a href="/withdraw">Withdraw Funds</a> | <a href="/transfer">Transfer Internally</a></p>

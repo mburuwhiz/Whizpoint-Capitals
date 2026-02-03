@@ -1,0 +1,29 @@
+<h1>Pending Verifications</h1>
+<table>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Fee Paid</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% verifications.forEach(v => { %>
+      <tr>
+        <td><%= v.userId.email %></td>
+        <td><%= v.feePaid ? 'Yes' : 'No' %></td>
+        <td>
+          <form action="/admin/verifications/<%= v._id %>/approve" method="POST" style="display:inline;">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <button type="submit">Approve</button>
+          </form>
+          <form action="/admin/verifications/<%= v._id %>/reject" method="POST" style="display:inline;">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <input type="text" name="reason" placeholder="Reason for rejection" required>
+            <button type="submit">Reject</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

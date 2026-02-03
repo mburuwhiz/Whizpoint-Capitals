@@ -1,0 +1,27 @@
+<h1>Audit Logs</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Timestamp</th>
+      <th>Admin</th>
+      <th>Action</th>
+      <th>Target User</th>
+      <th>Old Value</th>
+      <th>New Value</th>
+      <th>Reason</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% logs.forEach(log => { %>
+      <tr>
+        <td><%= log.createdAt.toLocaleString() %></td>
+        <td><%= log.adminId ? log.adminId.email : 'System' %></td>
+        <td><%= log.action %></td>
+        <td><%= log.targetUserId ? log.targetUserId.email : 'N/A' %></td>
+        <td><%= JSON.stringify(log.oldValue) %></td>
+        <td><%= JSON.stringify(log.newValue) %></td>
+        <td><%= log.reason %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

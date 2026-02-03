@@ -1,0 +1,21 @@
+<h1>User Management</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Currency</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% users.forEach(u => { %>
+      <tr>
+        <td><%= u.email %></td>
+        <td><%= u.preferredCurrency %></td>
+        <td><%= u.verificationStatus %></td>
+        <td><a href="/admin/users/<%= u._id %>">View Details</a></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

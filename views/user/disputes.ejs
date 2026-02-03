@@ -1,0 +1,21 @@
+<h1>My Disputes</h1>
+<% disputes.forEach(d => { %>
+  <div class="dispute-card">
+    <p><strong>Reason:</strong> <%= d.reason %></p>
+    <p><strong>Status:</strong> <%= d.status %></p>
+    <% if (d.adminResponse) { %>
+      <p><strong>Admin Response:</strong> <%= d.adminResponse %></p>
+    <% } %>
+    <hr>
+  </div>
+<% }) %>
+
+<h3>File a New Dispute</h3>
+<form action="/profile/disputes" method="POST">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <div>
+    <label>Reason / Details:</label>
+    <textarea name="reason" required></textarea>
+  </div>
+  <button type="submit">Submit Dispute</button>
+</form>

@@ -1,0 +1,14 @@
+
+> app@1.0.0 start
+> node app.js
+
+[dotenv@17.2.3] injecting env (18) from .env -- tip: ⚙️  write to custom object with { processEnv: myObject }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+Server running in development mode on port 3000
+[0mGET /login [32m200[0m 19.954 ms - 1402[0m
+[0mGET /css/main.css [32m200[0m 15.349 ms - 1113[0m
+[0mGET /js/main.js [32m200[0m 9.824 ms - 626[0m
+[0mGET /register [32m200[0m 3.487 ms - 1580[0m
+[0mGET /css/main.css [36m304[0m 3.144 ms - -[0m
+[0mGET /js/main.js [36m304[0m 3.085 ms - -[0m
+Terminated

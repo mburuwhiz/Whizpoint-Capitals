@@ -1,0 +1,28 @@
+<section class="hero">
+  <h1>Welcome to <%= process.env.COMPANY_NAME %></h1>
+  <p>Ultra-modern, secure fintech web platform for all your trading and fund management needs.</p>
+  <a href="/register" class="cta-button">Get Started</a>
+</section>
+
+<section class="testimonials">
+  <h2>What Our Users Say</h2>
+  <div class="testimonial-grid">
+    <% testimonials.forEach(t => { %>
+      <div class="testimonial-card">
+        <p>"Excellent platform!"</p>
+        <h4><%= t.name %> - <%= t.country %></h4>
+        <small><%= t.type %> | Volume: <%= t.volume %></small>
+      </div>
+    <% }) %>
+  </div>
+</section>
+
+<section class="compliance">
+  <h2>Our Compliance</h2>
+  <p>We adhere to strict regulatory standards to ensure your funds are safe.</p>
+  <div class="badges">
+    <span>[Anti-Money Laundering]</span>
+    <span>[KYC Verified]</span>
+    <span>[PCI-DSS Compliant]</span>
+  </div>
+</section>

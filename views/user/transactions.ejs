@@ -1,0 +1,27 @@
+<h1>Transaction History</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Type</th>
+      <th>Amount</th>
+      <th>Currency</th>
+      <th>Status</th>
+      <th>Description</th>
+      <th>Internal ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% transactions.forEach(tx => { %>
+      <tr>
+        <td><%= tx.createdAt.toLocaleString() %></td>
+        <td><%= tx.type %></td>
+        <td><%= tx.amount %></td>
+        <td><%= tx.currency %></td>
+        <td><%= tx.status %></td>
+        <td><%= tx.description %></td>
+        <td><small><%= tx.referenceIds.internal %></small></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

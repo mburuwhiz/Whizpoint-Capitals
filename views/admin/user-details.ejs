@@ -1,0 +1,56 @@
+<h1>User Details: <%= targetUser.email %></h1>
+<p>Status: <%= targetUser.isFrozen ? 'FROZEN' : 'ACTIVE' %></p>
+<form action="/admin/users/<%= targetUser._id %>/toggle-freeze" method="POST">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <input type="text" name="reason" placeholder="Reason for freeze/unfreeze" required>
+  <button type="submit"><%= targetUser.isFrozen ? 'Unfreeze' : 'Freeze' %> Account</button>
+</form>
+
+<hr>
+<h2>Wallets</h2>
+<ul>
+  <% wallets.forEach(w => { %>
+    <li><%= w.currency %>: <%= w.balance %></li>
+  <% }) %>
+</ul>
+
+<hr>
+<h3>Adjust Balance</h3>
+<form action="/admin/adjust-balance" method="POST">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <input type="hidden" name="userId" value="<%= targetUser._id %>">
+  <div>
+    <label>Currency:</label>
+    <select name="currency">
+      <option value="USD">USD</option>
+      <option value="KES">KES</option>
+      <option value="UGX">UGX</option>
+    </select>
+  </div>
+  <div>
+    <label>Amount:</label>
+    <input type="number" name="amount" required step="0.01">
+  </div>
+  <div>
+    <label>Action:</label>
+    <select name="action">
+      <option value="add">Add</option>
+      <option value="subtract">Subtract</option>
+    </select>
+  </div>
+  <div>
+    <label>Reason:</label>
+    <input type="text" name="reason" required>
+  </div>
+  <div>
+    <label>Evidence Reference:</label>
+    <input type="text" name="evidenceReference">
+  </div>
+  <button type="submit">Update Balance</button>
+</form>
+
+<hr>
+<h3>Recent Transactions</h3>
+<table>
+  <!-- Similar to user transactions table -->
+</table>

@@ -1,0 +1,23 @@
+<h1>Deposit</h1>
+<% if (locals.error) { %> <p style="color: red;"><%= error %></p> <% } %>
+<% if (locals.message) { %> <p style="color: green;"><%= message %></p> <% } %>
+
+<form action="/deposit" method="POST">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <div>
+    <label>Amount:</label>
+    <input type="number" name="amount" required min="1" step="0.01">
+  </div>
+  <div>
+    <label>Currency:</label>
+    <select name="currency">
+      <option value="KES">KES (M-Pesa)</option>
+      <option value="USD">USD</option>
+    </select>
+  </div>
+  <div>
+    <label>Phone Number (M-Pesa):</label>
+    <input type="text" name="phoneNumber" placeholder="254712345678">
+  </div>
+  <button type="submit">Initiate Deposit</button>
+</form>
