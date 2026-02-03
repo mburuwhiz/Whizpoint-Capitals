@@ -5,41 +5,75 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= title %> | <%= process.env.COMPANY_NAME %></title>
   <link rel="stylesheet" href="/css/main.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body class="light-mode">
-  <header>
+<body>
+  <div class="min-h-screen">
+    <!-- Navbar -->
     <nav>
-      <a href="/">Home</a>
-      <% if (locals.user) { %>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/wallets">Wallets</a>
-        <a href="/trade">Trade</a>
-        <a href="/profile">Profile</a>
-        <% if (user.role === 'admin') { %>
-          <a href="/admin">Admin</a>
-        <% } %>
-        <a href="/logout">Logout</a>
-      <% } else { %>
-        <a href="/login">Login</a>
-        <a href="/register">Register</a>
-      <% } %>
-      <button id="theme-toggle">Toggle Dark Mode</button>
-    </nav>
-  </header>
+      <div class="max-w-7xl flex items-center justify-between">
+        <a href="/" class="flex items-center" style="text-decoration: none; color: inherit;">
+          <span style="font-size: 1.5rem; font-weight: 800; color: var(--primary);">Whizpoint</span>
+        </a>
 
-  <main>
-    <%- body %>
-  </main>
-
-  <footer>
-    <p>&copy; <%= new Date().getFullYear() %> <%= process.env.BUSINESS_LEGAL_NAME %>. All rights reserved.</p>
-    <nav>
-      <a href="/about">About</a> |
-      <a href="/fees">Fees</a> |
-      <a href="/terms">Terms</a> |
-      <a href="/privacy">Privacy</a>
+        <div class="nav-links flex items-center">
+          <a href="/">Home</a>
+          <% if (locals.user) { %>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/wallets">Wallets</a>
+            <a href="/trade">Trade</a>
+            <a href="/profile">Profile</a>
+            <% if (user.role === 'admin') { %>
+              <a href="/admin" class="btn btn-primary" style="margin-left: 1rem;">Admin</a>
+            <% } %>
+            <a href="/logout" style="margin-left: 1rem;">Logout</a>
+          <% } else { %>
+            <a href="/login">Login</a>
+            <a href="/register" class="btn btn-primary" style="margin-left: 1rem;">Get Started</a>
+          <% } %>
+          <button id="theme-toggle" class="btn" style="margin-left: 1rem; background: var(--bg-alt);">🌓</button>
+        </div>
+      </div>
     </nav>
-  </footer>
+
+    <!-- Content Area -->
+    <main style="padding: 3rem 0;">
+      <div class="max-w-7xl">
+        <%- body %>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background-color: var(--bg-alt); padding: 4rem 0; border-top: 1px solid var(--border); margin-top: 4rem;">
+      <div class="max-w-7xl">
+        <div class="grid grid-3">
+          <div>
+            <span style="font-size: 1.25rem; font-weight: 800; color: var(--primary);">Whizpoint</span>
+            <p class="text-muted" style="margin-top: 1rem; max-width: 20rem;">
+              Empowering your financial future with ultra-modern, secure fintech solutions.
+            </p>
+          </div>
+          <div>
+            <h3 style="font-size: 0.875rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Company</h3>
+            <ul style="list-style: none; margin-top: 1rem;">
+              <li><a href="/about" class="text-muted" style="text-decoration: none;">About Us</a></li>
+              <li><a href="/fees" class="text-muted" style="text-decoration: none;">Fees</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 style="font-size: 0.875rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Legal</h3>
+            <ul style="list-style: none; margin-top: 1rem;">
+              <li><a href="/terms" class="text-muted" style="text-decoration: none;">Terms of Service</a></li>
+              <li><a href="/privacy" class="text-muted" style="text-decoration: none;">Privacy Policy</a></li>
+            </ul>
+          </div>
+        </div>
+        <div style="margin-top: 3rem; pt-3rem; border-top: 1px solid var(--border); padding-top: 2rem; display: flex; justify-content: space-between;">
+          <p class="text-muted">&copy; <%= new Date().getFullYear() %> <%= process.env.BUSINESS_LEGAL_NAME %>. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
 
   <script src="/js/main.js"></script>
 </body>

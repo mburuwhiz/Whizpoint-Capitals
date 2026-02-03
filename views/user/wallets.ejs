@@ -1,11 +1,53 @@
-<h1>My Wallets</h1>
-<ul>
-  <% wallets.forEach(wallet => { %>
-    <li>
-      <strong><%= wallet.currency %></strong>: <%= wallet.balance %>
-      <br>
-      <small>Locked: <%= wallet.lockedBalance %></small>
-    </li>
-  <% }) %>
-</ul>
-<p><a href="/deposit">Deposit Funds</a> | <a href="/withdraw">Withdraw Funds</a> | <a href="/transfer">Transfer Internally</a></p>
+<div class="space-y-8">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white">My Wallets</h1>
+      <p class="text-gray-500 dark:text-gray-400 mt-1">Manage your funds across multiple currencies.</p>
+    </div>
+    <div class="flex space-x-3">
+      <a href="/deposit" class="btn-primary flex items-center shadow-lg"><i class="fas fa-plus mr-2 text-xs"></i> New Deposit</a>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <% wallets.forEach(wallet => { %>
+      <div class="card relative overflow-hidden group hover:shadow-md transition">
+        <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition">
+          <i class="fas fa-wallet text-8xl"></i>
+        </div>
+        <div class="relative z-10">
+          <div class="flex justify-between items-start mb-6">
+            <div class="flex items-center">
+              <div class="w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center text-primary-600 font-bold mr-3">
+                <%= wallet.currency.charAt(0) %>
+              </div>
+              <h3 class="text-xl font-bold"><%= wallet.currency %> Wallet</h3>
+            </div>
+            <span class="px-2 py-1 bg-green-100 text-green-800 text-[10px] font-bold rounded uppercase">Active</span>
+          </div>
+
+          <div class="space-y-1">
+            <p class="text-sm text-gray-500 uppercase tracking-wider font-semibold">Available Balance</p>
+            <h2 class="text-4xl font-extrabold text-gray-900 dark:text-white"><%= wallet.balance.toFixed(2) %></h2>
+          </div>
+
+          <div class="mt-6 flex items-center justify-between text-sm text-gray-500 border-t border-gray-100 dark:border-gray-700 pt-4">
+            <span>Locked: <span class="font-medium text-gray-900 dark:text-white"><%= wallet.lockedBalance %></span></span>
+            <div class="flex space-x-2">
+              <a href="/transfer" title="Transfer" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition"><i class="fas fa-paper-plane"></i></a>
+              <a href="/trade" title="Exchange" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition"><i class="fas fa-sync"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+
+    <!-- Add New Wallet Card -->
+    <a href="/trade" class="card border-dashed border-2 border-gray-300 dark:border-gray-700 bg-transparent flex flex-col items-center justify-center py-12 hover:border-primary-500 group transition cursor-pointer">
+      <div class="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-400 group-hover:bg-primary-600 group-hover:text-white transition mb-4">
+        <i class="fas fa-plus"></i>
+      </div>
+      <p class="font-bold text-gray-400 group-hover:text-primary-600 transition">Open New Currency Wallet</p>
+    </a>
+  </div>
+</div>

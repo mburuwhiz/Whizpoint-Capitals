@@ -1,23 +1,82 @@
-<h1>Deposit</h1>
-<% if (locals.error) { %> <p style="color: red;"><%= error %></p> <% } %>
-<% if (locals.message) { %> <p style="color: green;"><%= message %></p> <% } %>
+<div class="max-w-2xl mx-auto">
+  <div class="text-center mb-12">
+    <div class="inline-flex items-center justify-center w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full text-green-600 text-3xl mb-4">
+      <i class="fas fa-arrow-down"></i>
+    </div>
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Deposit Funds</h1>
+    <p class="text-gray-500 dark:text-gray-400 mt-2">Add funds to your wallet securely via M-Pesa or Bank.</p>
+  </div>
 
-<form action="/deposit" method="POST">
-  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-  <div>
-    <label>Amount:</label>
-    <input type="number" name="amount" required min="1" step="0.01">
+  <div class="card shadow-xl">
+    <% if (locals.error) { %>
+      <div class="mb-6 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-400 p-4 rounded text-sm text-red-700 dark:text-red-400 flex items-center">
+        <i class="fas fa-times-circle mr-2"></i> <%= error %>
+      </div>
+    <% } %>
+    <% if (locals.message) { %>
+      <div class="mb-6 bg-green-50 dark:bg-green-900/20 border-l-4 border-green-400 p-4 rounded text-sm text-green-700 dark:text-green-400 flex items-center">
+        <i class="fas fa-check-circle mr-2"></i> <%= message %>
+      </div>
+    <% } %>
+
+    <form action="/deposit" method="POST" class="space-y-8">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="md:col-span-2">
+          <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Amount to Deposit</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+              <i class="fas fa-dollar-sign"></i>
+            </div>
+            <input type="number" name="amount" required min="1" step="0.01" class="input-field pl-10 text-xl font-bold" placeholder="0.00">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Currency</label>
+          <select name="currency" class="input-field">
+            <option value="KES">KES - M-Pesa</option>
+            <option value="USD">USD - US Dollar</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Phone Number</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 font-bold text-xs">
+              +
+            </div>
+            <input type="text" name="phoneNumber" placeholder="254712345678" class="input-field pl-6">
+          </div>
+          <p class="text-[10px] text-gray-500 mt-1 uppercase font-bold tracking-tighter">Enter number in international format</p>
+        </div>
+      </div>
+
+      <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-xl border border-gray-100 dark:border-gray-700 flex items-start">
+        <i class="fas fa-info-circle text-primary-600 mt-1 mr-3"></i>
+        <p class="text-xs text-gray-600 dark:text-gray-400">
+          After clicking "Initiate Deposit", you will receive an STK Push on your phone to enter your M-Pesa PIN. Funds will reflect in your wallet once the payment is confirmed.
+        </p>
+      </div>
+
+      <div>
+        <button type="submit" class="w-full btn-primary py-4 text-lg shadow-lg flex items-center justify-center">
+          <i class="fas fa-bolt mr-2 text-sm"></i> Initiate Deposit
+        </button>
+      </div>
+    </form>
   </div>
-  <div>
-    <label>Currency:</label>
-    <select name="currency">
-      <option value="KES">KES (M-Pesa)</option>
-      <option value="USD">USD</option>
-    </select>
+
+  <div class="mt-8 grid grid-cols-3 gap-4 text-center opacity-40">
+     <div class="text-xs font-bold uppercase tracking-widest flex flex-col items-center">
+       <i class="fas fa-lock mb-2 text-xl"></i> Secure
+     </div>
+     <div class="text-xs font-bold uppercase tracking-widest flex flex-col items-center">
+       <i class="fas fa-history mb-2 text-xl"></i> Instant
+     </div>
+     <div class="text-xs font-bold uppercase tracking-widest flex flex-col items-center">
+       <i class="fas fa-headset mb-2 text-xl"></i> 24/7 Support
+     </div>
   </div>
-  <div>
-    <label>Phone Number (M-Pesa):</label>
-    <input type="text" name="phoneNumber" placeholder="254712345678">
-  </div>
-  <button type="submit">Initiate Deposit</button>
-</form>
+</div>

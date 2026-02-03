@@ -1,28 +1,73 @@
-<h1>Internal Transfer</h1>
-<% if (locals.error) { %> <p style="color: red;"><%= error %></p> <% } %>
-<% if (locals.message) { %> <p style="color: green;"><%= message %></p> <% } %>
+<div class="max-w-2xl mx-auto">
+  <div class="text-center mb-12">
+    <div class="inline-flex items-center justify-center w-20 h-20 bg-primary-100 dark:bg-primary-900/30 rounded-full text-primary-600 text-3xl mb-4">
+      <i class="fas fa-paper-plane"></i>
+    </div>
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Internal Transfer</h1>
+    <p class="text-gray-500 dark:text-gray-400 mt-2">Send money instantly to any Whizpoint Capitals user.</p>
+  </div>
 
-<form action="/transfer" method="POST">
-  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-  <div>
-    <label>Recipient Email:</label>
-    <input type="email" name="recipientEmail" required>
+  <div class="card shadow-xl">
+    <% if (locals.error) { %>
+      <div class="mb-6 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-400 p-4 rounded text-sm text-red-700 dark:text-red-400">
+        <%= error %>
+      </div>
+    <% } %>
+    <% if (locals.message) { %>
+      <div class="mb-6 bg-green-50 dark:bg-green-900/20 border-l-4 border-green-400 p-4 rounded text-sm text-green-700 dark:text-green-400">
+        <%= message %>
+      </div>
+    <% } %>
+
+    <form action="/transfer" method="POST" class="space-y-6">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+      <div>
+        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Recipient Email</label>
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <input type="email" name="recipientEmail" required class="input-field pl-10" placeholder="user@example.com">
+        </div>
+        <p class="text-xs text-gray-500 mt-1 italic">Make sure the recipient is registered on the platform.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Amount</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+              <i class="fas fa-coins"></i>
+            </div>
+            <input type="number" name="amount" required min="0.01" step="0.01" class="input-field pl-10" placeholder="0.00">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Currency</label>
+          <select name="currency" class="input-field">
+            <option value="USD">USD - US Dollar</option>
+            <option value="KES">KES - Kenyan Shilling</option>
+            <option value="UGX">UGX - Ugandan Shilling</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-gray-700">
+        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2"><%= captchaQuestion %></label>
+        <input type="number" name="captcha" required class="input-field" placeholder="Answer for security">
+      </div>
+
+      <div>
+        <button type="submit" class="w-full btn-primary py-4 text-lg shadow-lg flex items-center justify-center">
+          <i class="fas fa-paper-plane mr-2 text-sm"></i> Send Funds Now
+        </button>
+      </div>
+    </form>
   </div>
-  <div>
-    <label>Amount:</label>
-    <input type="number" name="amount" required min="0.01" step="0.01">
+
+  <div class="mt-8 text-center text-gray-500 text-sm">
+    <i class="fas fa-shield-alt mr-1"></i> Transfers are secured by bank-grade encryption and 2FA.
   </div>
-  <div>
-    <label>Currency:</label>
-    <select name="currency">
-      <option value="USD">USD</option>
-      <option value="KES">KES</option>
-      <option value="UGX">UGX</option>
-    </select>
-  </div>
-  <div>
-    <label><%= captchaQuestion %></label>
-    <input type="number" name="captcha" required>
-  </div>
-  <button type="submit">Transfer</button>
-</form>
+</div>

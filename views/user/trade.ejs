@@ -1,38 +1,95 @@
-<h1>Trade / Currency Exchange</h1>
-<% if (locals.error) { %> <p style="color: red;"><%= error %></p> <% } %>
+<div class="max-w-4xl mx-auto">
+  <div class="flex flex-col md:flex-row gap-8">
+    <!-- Trade Form -->
+    <div class="md:w-2/3 space-y-6">
+      <div class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Currency Exchange</h1>
+        <p class="text-gray-500 dark:text-gray-400">Swap between your wallets instantly at real-time rates.</p>
+      </div>
 
-<form action="/trade" method="POST">
-  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-  <div>
-    <label>From Currency:</label>
-    <select name="fromCurrency">
-      <% wallets.forEach(w => { %>
-        <option value="<%= w.currency %>"><%= w.currency %> (Bal: <%= w.balance %>)</option>
-      <% }) %>
-    </select>
-  </div>
-  <div>
-    <label>To Currency:</label>
-    <select name="toCurrency">
-      <option value="USD">USD</option>
-      <option value="KES">KES</option>
-      <option value="UGX">UGX</option>
-    </select>
-  </div>
-  <div>
-    <label>Amount to Exchange:</label>
-    <input type="number" name="amount" required step="0.01" min="0.01">
-  </div>
-  <button type="submit">Exchange</button>
-</form>
+      <div class="card shadow-xl">
+        <% if (locals.error) { %>
+          <div class="mb-6 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-400 p-4 rounded text-sm text-red-700 dark:text-red-400">
+            <%= error %>
+          </div>
+        <% } %>
 
-<h3>Current Rates</h3>
-<ul>
-  <% for (const from in exchangeRates) { %>
-    <li>1 <%= from %> =
-      <% for (const to in exchangeRates[from]) { %>
-        <%= exchangeRates[from][to].toFixed(4) %> <%= to %> |
-      <% } %>
-    </li>
-  <% } %>
-</ul>
+        <form action="/trade" method="POST" class="space-y-8">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+          <div class="space-y-4">
+            <div class="p-6 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700">
+              <label class="block text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Sell</label>
+              <div class="flex items-center gap-4">
+                <input type="number" name="amount" required step="0.01" min="0.01" class="bg-transparent text-3xl font-bold w-full outline-none" placeholder="0.00">
+                <select name="fromCurrency" class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-4 py-2 font-bold text-lg">
+                  <% wallets.forEach(w => { %>
+                    <option value="<%= w.currency %>"><%= w.currency %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <% if (wallets.length > 0) { %>
+                <p class="mt-2 text-xs text-gray-500 font-medium text-right">Balance: <%= wallets[0].balance.toFixed(2) %> <%= wallets[0].currency %></p>
+              <% } %>
+            </div>
+
+            <div class="flex justify-center -my-6 relative z-10">
+              <div class="bg-white dark:bg-gray-900 p-3 rounded-full border-4 border-gray-50 dark:border-gray-900 shadow-md">
+                <i class="fas fa-arrow-down text-primary-600"></i>
+              </div>
+            </div>
+
+            <div class="p-6 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700">
+              <label class="block text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">Buy</label>
+              <div class="flex items-center gap-4">
+                <input type="text" readonly value="Estimated..." class="bg-transparent text-3xl font-bold w-full outline-none text-gray-400">
+                <select name="toCurrency" class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg px-4 py-2 font-bold text-lg">
+                  <option value="USD">USD</option>
+                  <option value="KES">KES</option>
+                  <option value="UGX">UGX</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="w-full btn-primary py-5 text-xl font-bold shadow-2xl transition transform hover:scale-[1.02] active:scale-[0.98]">
+            Complete Exchange
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Rates & Info -->
+    <div class="md:w-1/3 space-y-6">
+      <div class="card bg-primary-600 text-white border-none shadow-xl">
+        <h3 class="text-xl font-bold mb-6 flex items-center">
+          <i class="fas fa-chart-line mr-2"></i> Live Rates
+        </h3>
+        <div class="space-y-6">
+          <% for (const from in exchangeRates) { %>
+            <div class="border-b border-white/10 pb-4 last:border-0 last:pb-0">
+              <p class="text-primary-100 text-xs font-bold uppercase mb-2">From <%= from %></p>
+              <div class="space-y-2">
+                <% for (const to in exchangeRates[from]) { %>
+                  <div class="flex justify-between items-center text-sm">
+                    <span class="opacity-70">1 <%= from %></span>
+                    <span class="font-bold font-mono"><%= exchangeRates[from][to].toFixed(4) %> <%= to %></span>
+                  </div>
+                <% } %>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="card p-6 border-blue-100 dark:border-blue-900/30">
+         <h4 class="font-bold flex items-center text-blue-900 dark:text-blue-400 mb-2">
+           <i class="fas fa-info-circle mr-2"></i> Quick Tip
+         </h4>
+         <p class="text-sm text-blue-800 dark:text-blue-300">
+           Exchanges are instant. New wallets will be automatically created for you upon successful trade.
+         </p>
+      </div>
+    </div>
+  </div>
+</div>
