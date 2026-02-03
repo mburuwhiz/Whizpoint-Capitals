@@ -24,6 +24,10 @@ app.post('/stk-push', (req, res) => {
       await axios.post('http://localhost:3000/daraja/callback', {
         reference,
         status: 'Success'
+      }, {
+        headers: {
+          'x-api-key': apiKey
+        }
       });
       console.log(`[Daraja] Callback sent for ${reference}`);
     } catch (err) {

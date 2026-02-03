@@ -55,8 +55,11 @@
       </div>
 
       <div class="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-gray-700">
-        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2"><%= captchaQuestion %></label>
-        <input type="number" name="captcha" required class="input-field" placeholder="Answer for security">
+        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Security Verification</label>
+        <div style="margin-bottom: 0.75rem; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: white; display: flex; justify-content: center; padding: 5px;">
+          <%- captchaSvg %>
+        </div>
+        <input type="text" name="captcha" required class="input-field" placeholder="Enter characters above">
       </div>
 
       <div>

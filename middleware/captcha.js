@@ -1,16 +1,25 @@
+const svgCaptcha = require('svg-captcha');
+
 exports.generateCaptcha = (req, res, next) => {
-  const num1 = Math.floor(Math.random() * 10);
-  const num2 = Math.floor(Math.random() * 10);
-  req.session.captcha = num1 + num2;
-  res.locals.captchaQuestion = `What is ${num1} + ${num2}?`;
+  const captcha = svgCaptcha.create({
+    size: 6,
+    noise: 3,
+    color: true,
+    background: '#f8fafc'
+  });
+  req.session.captcha = captcha.text.toLowerCase();
+  res.locals.captchaSvg = captcha.data;
   next();
 };
 
 exports.validateCaptcha = (req, res, next) => {
-  if (parseInt(req.body.captcha) !== req.session.captcha) {
-    // If it's a view, we should ideally render the view with an error
-    // For simplicity in this task, we'll just send an error or redirect
-    return res.status(400).send('Invalid CAPTCHA. Please go back and try again.');
+  const userCaptcha = (req.body.captcha || '').toLowerCase();
+  if (userCaptcha !== req.session.captcha) {
+    req.captchaError = 'Invalid CAPTCHA code. Please try again.';
+    // We don't return here because we want the controller to handle the error
+    // and re-render the page with other form data if possible.
+    // BUT for simplicity, many apps just error out here.
+    // Let's attach it to req and let the controller decide.
   }
   next();
 };

@@ -26,8 +26,11 @@
       </div>
 
       <div>
-        <label class="font-bold" style="font-size: 0.875rem;"><%= captchaQuestion %></label>
-        <input name="captcha" type="number" required class="input-field" placeholder="Security Answer">
+        <label class="font-bold" style="font-size: 0.875rem;">Security Verification</label>
+        <div style="margin-bottom: 0.5rem; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: white; display: flex; justify-content: center;">
+          <%- captchaSvg %>
+        </div>
+        <input name="captcha" type="text" required class="input-field" placeholder="Enter characters above">
       </div>
 
       <div class="flex items-center justify-between" style="font-size: 0.875rem;">

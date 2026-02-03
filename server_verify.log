@@ -1,0 +1,10 @@
+
+> app@1.0.0 start
+> node app.js
+
+[dotenv@17.2.3] injecting env (20) from .env -- tip: ⚙️  suppress all logs with { quiet: true }
+[dotenv@17.2.3] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+Server running in development mode on port 3000
+[0mGET / [32m200[0m 14.223 ms - 8484[0m
+[0mGET /css/main.css [32m200[0m 8.274 ms - 3783[0m
+[0mGET /js/main.js [32m200[0m 7.234 ms - 755[0m

@@ -1,36 +1,107 @@
-<h1>Notification Settings</h1>
-<form action="/profile/notifications" method="POST">
-  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-  <div>
-    <label>
-      <input type="checkbox" name="loginAlerts" <%= user.emailPreferences.loginAlerts ? 'checked' : '' %>>
-      Login Alerts
-    </label>
+<div class="max-w-4xl mx-auto">
+  <div class="mb-8">
+    <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white">Notification Settings</h1>
+    <p class="text-muted">Choose how you want to be notified about your account activity.</p>
   </div>
-  <div>
-    <label>
-      <input type="checkbox" name="withdrawalAlerts" <%= user.emailPreferences.withdrawalAlerts ? 'checked' : '' %>>
-      Withdrawal Alerts
-    </label>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="md:col-span-1 space-y-6">
+      <nav class="card p-0 overflow-hidden">
+        <a href="/profile" class="block px-6 py-4 text-gray-600 hover:bg-gray-50 border-l-4 border-transparent transition">
+          <i class="fas fa-user-circle mr-2"></i> General
+        </a>
+        <a href="/profile/notifications" class="block px-6 py-4 bg-primary-50 text-primary-600 font-bold border-l-4 border-primary-600">
+          <i class="fas fa-bell mr-2"></i> Notifications
+        </a>
+        <a href="/profile/disputes" class="block px-6 py-4 text-gray-600 hover:bg-gray-50 border-l-4 border-transparent transition">
+          <i class="fas fa-gavel mr-2"></i> My Disputes
+        </a>
+        <a href="/verification" class="block px-6 py-4 text-gray-600 hover:bg-gray-50 border-l-4 border-transparent transition">
+          <i class="fas fa-id-card mr-2"></i> Verification
+        </a>
+      </nav>
+    </div>
+
+    <div class="md:col-span-2">
+      <div class="card">
+        <h3 class="text-xl font-bold mb-6">Email Preferences</h3>
+        <form action="/profile/notifications" method="POST" class="space-y-6">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+          <div class="space-y-4">
+            <label class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl cursor-pointer hover:bg-gray-100 transition">
+              <div class="flex items-center">
+                <div class="w-10 h-10 bg-white dark:bg-gray-700 rounded-lg flex items-center justify-center text-primary-600 mr-4 shadow-sm">
+                  <i class="fas fa-sign-in-alt"></i>
+                </div>
+                <div>
+                  <p class="font-bold">Login Alerts</p>
+                  <p class="text-xs text-muted">Get notified every time someone logs into your account.</p>
+                </div>
+              </div>
+              <input type="checkbox" name="loginAlerts" class="w-5 h-5 text-primary-600 rounded" <%= user.emailPreferences.loginAlerts ? 'checked' : '' %>>
+            </label>
+
+            <label class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl cursor-pointer hover:bg-gray-100 transition">
+              <div class="flex items-center">
+                <div class="w-10 h-10 bg-white dark:bg-gray-700 rounded-lg flex items-center justify-center text-red-600 mr-4 shadow-sm">
+                  <i class="fas fa-arrow-up"></i>
+                </div>
+                <div>
+                  <p class="font-bold">Withdrawal Alerts</p>
+                  <p class="text-xs text-muted">Instant notifications for all withdrawal requests.</p>
+                </div>
+              </div>
+              <input type="checkbox" name="withdrawalAlerts" class="w-5 h-5 text-primary-600 rounded" <%= user.emailPreferences.withdrawalAlerts ? 'checked' : '' %>>
+            </label>
+
+            <label class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl cursor-pointer hover:bg-gray-100 transition">
+              <div class="flex items-center">
+                <div class="w-10 h-10 bg-white dark:bg-gray-700 rounded-lg flex items-center justify-center text-blue-600 mr-4 shadow-sm">
+                  <i class="fas fa-paper-plane"></i>
+                </div>
+                <div>
+                  <p class="font-bold">Transfer Alerts</p>
+                  <p class="text-xs text-muted">Receive alerts for internal and external transfers.</p>
+                </div>
+              </div>
+              <input type="checkbox" name="transferAlerts" class="w-5 h-5 text-primary-600 rounded" <%= user.emailPreferences.transferAlerts ? 'checked' : '' %>>
+            </label>
+
+            <label class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl cursor-pointer hover:bg-gray-100 transition">
+              <div class="flex items-center">
+                <div class="w-10 h-10 bg-white dark:bg-gray-700 rounded-lg flex items-center justify-center text-green-600 mr-4 shadow-sm">
+                  <i class="fas fa-user-check"></i>
+                </div>
+                <div>
+                  <p class="font-bold">Verification Emails</p>
+                  <p class="text-xs text-muted">Status updates on your KYC and account verification.</p>
+                </div>
+              </div>
+              <input type="checkbox" name="verificationEmails" class="w-5 h-5 text-primary-600 rounded" <%= user.emailPreferences.verificationEmails ? 'checked' : '' %>>
+            </label>
+
+            <label class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl cursor-pointer hover:bg-gray-100 transition">
+              <div class="flex items-center">
+                <div class="w-10 h-10 bg-white dark:bg-gray-700 rounded-lg flex items-center justify-center text-purple-600 mr-4 shadow-sm">
+                  <i class="fas fa-bullhorn"></i>
+                </div>
+                <div>
+                  <p class="font-bold">Marketing Emails</p>
+                  <p class="text-xs text-muted">Promotions, new features, and market insights.</p>
+                </div>
+              </div>
+              <input type="checkbox" name="marketingEmails" class="w-5 h-5 text-primary-600 rounded" <%= user.emailPreferences.marketingEmails ? 'checked' : '' %>>
+            </label>
+          </div>
+
+          <div class="pt-6">
+            <button type="submit" class="btn btn-primary px-8">
+              Save Preferences
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
-  <div>
-    <label>
-      <input type="checkbox" name="transferAlerts" <%= user.emailPreferences.transferAlerts ? 'checked' : '' %>>
-      Transfer Alerts
-    </label>
-  </div>
-  <div>
-    <label>
-      <input type="checkbox" name="verificationEmails" <%= user.emailPreferences.verificationEmails ? 'checked' : '' %>>
-      Verification Emails
-    </label>
-  </div>
-  <div>
-    <label>
-      <input type="checkbox" name="marketingEmails" <%= user.emailPreferences.marketingEmails ? 'checked' : '' %>>
-      Marketing Emails
-    </label>
-  </div>
-  <button type="submit">Save Preferences</button>
-</form>
-<p><a href="/profile">Back to Profile</a></p>
+</div>

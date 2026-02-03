@@ -11,9 +11,20 @@ exports.postRegister = async (req, res) => {
   try {
     const { email, password, preferredCurrency } = req.body;
 
+    if (req.captchaError) {
+      // Regenerate captcha for the re-render
+      const svgCaptcha = require('svg-captcha');
+      const captcha = svgCaptcha.create({ size: 6, noise: 3, color: true, background: '#f8fafc' });
+      req.session.captcha = captcha.text.toLowerCase();
+      return res.render('auth/register', { error: req.captchaError, title: 'Register', captchaSvg: captcha.data });
+    }
+
     let user = await User.findOne({ email });
     if (user) {
-      return res.render('auth/register', { error: 'Email already exists', title: 'Register' });
+      const svgCaptcha = require('svg-captcha');
+      const captcha = svgCaptcha.create({ size: 6, noise: 3, color: true, background: '#f8fafc' });
+      req.session.captcha = captcha.text.toLowerCase();
+      return res.render('auth/register', { error: 'Email already exists', title: 'Register', captchaSvg: captcha.data });
     }
 
     user = await User.create({
@@ -42,10 +53,21 @@ exports.getLogin = (req, res) => {
 exports.postLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    if (req.captchaError) {
+      const svgCaptcha = require('svg-captcha');
+      const captcha = svgCaptcha.create({ size: 6, noise: 3, color: true, background: '#f8fafc' });
+      req.session.captcha = captcha.text.toLowerCase();
+      return res.render('auth/login', { error: req.captchaError, title: 'Login', captchaSvg: captcha.data });
+    }
+
     const user = await User.findOne({ email });
 
     if (!user || !(await user.comparePassword(password))) {
-      return res.render('auth/login', { error: 'Invalid credentials', title: 'Login' });
+      const svgCaptcha = require('svg-captcha');
+      const captcha = svgCaptcha.create({ size: 6, noise: 3, color: true, background: '#f8fafc' });
+      req.session.captcha = captcha.text.toLowerCase();
+      return res.render('auth/login', { error: 'Invalid credentials', title: 'Login', captchaSvg: captcha.data });
     }
 
     req.session.userId = user._id;

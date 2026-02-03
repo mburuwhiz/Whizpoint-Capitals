@@ -85,6 +85,13 @@ exports.postTransfer = async (req, res) => {
   try {
     const { recipientEmail, amount, currency } = req.body;
 
+    if (req.captchaError) {
+      const svgCaptcha = require('svg-captcha');
+      const captcha = svgCaptcha.create({ size: 6, noise: 3, color: true, background: '#f8fafc' });
+      req.session.captcha = captcha.text.toLowerCase();
+      return res.render('user/transfer', { error: req.captchaError, title: 'Internal Transfer', captchaSvg: captcha.data });
+    }
+
     // Check verification
     if (req.user.verificationStatus === 'Unverified') {
       return res.redirect('/verification?reason=verification_required');
@@ -155,6 +162,14 @@ const exchangeRates = {
 exports.postCallback = async (req, res) => {
   try {
     const { reference, status } = req.body;
+    const apiKey = req.headers['x-api-key'];
+
+    // Security check: validate Daraja API Key
+    if (apiKey !== process.env.DARAJA_API_KEY) {
+      console.warn(`[Security Alert] Unauthorized Daraja Callback attempt from IP: ${req.ip}`);
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+
     const transaction = await Transaction.findOne({ 'referenceIds.internal': reference });
 
     if (transaction) {
